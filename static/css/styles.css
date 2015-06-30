@@ -43,18 +43,36 @@ section.action {
 	text-align: center;
 	padding: 20px 0;
 }
-section.top-row {
+.top-row {
 	margin-top: 80px;
-	height: 400px;
 	color: white;
 	background-color: #E84C3D;
 }
-section {
-	height: 1000px;
+.second-row {
+	background-color: white;
 }
 .action .row .column{ border: 10px solid black;}
 
 /* Overrides */
 .container {
 	max-width: 1200px;
+}
+.scratch {
+	fill: white;
+	margin: 0 auto;
+}
+.description { margin-top: 70px;}
+.description p {
+	font-size: 1.1em;
+}
+svg {
+	display: block;
+	margin: 0 auto;
+}
+.box {
+	margin-top: 20px;
+	text-align: center;
+}
+.box p {
+	margin: 20px;
 }
