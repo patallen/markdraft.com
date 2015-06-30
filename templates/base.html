@@ -2,11 +2,10 @@
 {% load staticfiles %}
 <html>
 	<head>
-	<link href='http://fonts.googleapis.com/css?family=Dynalight' rel='stylesheet' type='text/css'>
-	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700' rel='stylesheet' type='text/css'>
-	<link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css" rel="stylesheet" type='text/css'>
-	<!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">-->
-	<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+		<link href='http://fonts.googleapis.com/css?family=Dynalight' rel='stylesheet' type='text/css'>
+		<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700' rel='stylesheet' type='text/css'>
+		<link href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css' rel='stylesheet'>
+		<link href='{% static 'css/styles.css' %}' rel='stylesheet'>
 		<title>Markdraft {% block title %}{% endblock %}</title>
 	</head>
 	<body>
