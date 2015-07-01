@@ -41,6 +41,9 @@ body {
 .navbar-top  a:hover {
 	background-color: black;
 }
+.navbar-top a.active {
+	background-color: black;
+}
 /* Body Styles */
 section.action {
 	font-family: 'Open Sans', sans-serif;
