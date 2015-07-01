@@ -45,6 +45,10 @@ body {
 	padding: 0 20px;
 	transition: .2s;
 }
+.navbar-top form {
+	float: right;
+	display: inline;
+}
 .navbar-top  a:hover {
 	background-color: black;
 }
@@ -95,3 +99,5 @@ svg {
 h2.header {
 	margin: 20px 0;
 }
+form {display: inline;}
+
