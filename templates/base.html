@@ -11,7 +11,8 @@
 	</head>
 	<body>
 	<nav class="navbar-top navbar-fixed">
-		<div class="navbrand"> Markdraft
+		<div class="navbrand">
+			<a href="{% url "index" %}">Markdraft</a>
 		</div>
 		<a class="{% navactive request "signup"  %}" href="{% url "signup" %}">Sign up</a>
 		<a href="#">Sign in</a>

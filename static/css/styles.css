@@ -24,6 +24,13 @@ body {
 	margin-left: 12px;
 	color: white;
 }
+.navbar-top .navbrand a {
+	float: left;
+	text-decoration: none;
+}
+.navbar-top .navbrand a:hover {
+	background: inherit;
+}
 .nav {
 	float: right;
 }
