@@ -87,7 +87,10 @@ svg {
 	text-align: center;
 }
 .box p {
-	margin: 20px;
+	margin: 10px 25px;
+}
+.box i {
+	margin: 20px 0;
 }
 h2.header {
 	margin: 20px 0;
