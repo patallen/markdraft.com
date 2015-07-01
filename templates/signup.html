@@ -1,9 +1,14 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
 {% block content %}
-<h2>Sign up for Markdraft</h2>
-<form action='{% url 'signup' %}' method='POST'>
-	{% csrf_token %}
-	{{ form.as_p }}
-	<input type='submit' value='Sign up!'/>
-</form>
+<h2 class="text-center header">Sign up for Markdraft</h2>
+<div class="container">
+	<div class="col-md-offset-4 col-md-4">
+		<form action='{% url 'signup' %}' method='POST'>
+			{% csrf_token %}
+			{{ form | crispy }}
+			<input class="btn btn-block btn-primary" type='submit' value='Sign up!'/>
+		</form>
+	</div>
+</div>
 {% endblock %}

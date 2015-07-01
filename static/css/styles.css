@@ -1,5 +1,9 @@
 /* Navbar Styles */
+body {
+	padding-top: 80px;
+}
 .navbar-top {
+	height: 80px;
 	position: fixed;
 	width: 100%;
 	background-color: #595959;
@@ -23,7 +27,7 @@
 .nav {
 	float: right;
 }
-.nav a{
+.navbar-top a{
 	font-size: 1.2em;
 	float: right;
 	margin: 0;
@@ -34,7 +38,7 @@
 	padding: 0 20px;
 	transition: .2s;
 }
-.nav a:hover {
+.navbar-top  a:hover {
 	background-color: black;
 }
 /* Body Styles */
@@ -44,7 +48,6 @@ section.action {
 	padding: 20px 0;
 }
 .top-row {
-	margin-top: 80px;
 	color: white;
 	background-color: #E84C3D;
 }
@@ -75,4 +78,7 @@ svg {
 }
 .box p {
 	margin: 20px;
+}
+h2.header {
+	margin: 20px 0;
 }
