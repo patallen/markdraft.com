@@ -36,25 +36,37 @@ body {
 }
 .navbar-top a{
 	font-size: 1.2em;
-	float: right;
 	margin: 0;
 	line-height: 80px;
 	color: white;
 	text-decoration: none;
-	display: block;
 	padding: 0 20px;
 	transition: .2s;
 }
 .navbar-top form {
-	float: right;
+	float: left;
 	display: inline;
 }
-.navbar-top  a:hover {
+.navigation {
+	float: left;
+	display: inline;
+	float: right;
+}
+.navigation ul {
+	margin: 0;
+	padding: 0;
+}
+.navigation ul li {
+	float: left;
+	display: block;
+}
+.navigation ul li a {
+	display: block;
+}
+.navigation ul li:hover {
 	background-color: black;
 }
-.navbar-top a.active {
-	background-color: black;
-}
+
 /* Body Styles */
 section.action {
 	font-family: 'Open Sans', sans-serif;
@@ -100,4 +112,3 @@ h2.header {
 	margin: 20px 0;
 }
 form {display: inline;}
-
