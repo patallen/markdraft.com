@@ -13,4 +13,5 @@ urlpatterns = [
     url(r'^dashboard/$',
         login_required(views.DashboardView.as_view()),
         name='dashboard'),
+    url(r'^create/$', views.CreateDocumentView.as_view(), name='create_document'),
 ]

@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-# Create your models here.
 
 
 class Document(models.Model):
@@ -22,7 +21,7 @@ class Draft(models.Model):
     document = models.ForeignKey(Document, related_name='drafts')
 
     def _get_title(self):
-        return self.text.split('\n', 1)[0]
+        return self.text.splitlines()[0]
     title = property(_get_title)
 
     def __str__(self):

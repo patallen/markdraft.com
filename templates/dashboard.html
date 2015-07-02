@@ -1,7 +1,7 @@
-This is the restricted dashboard.
+Your Documents:
 
-{% for draft in object_list %}
+{% for document in object_list %}
 <div class="col-md-4 well">
-{{ draft.current_title }}
+{{ document.latest_draft.title }}
 </div>
 {% endfor %}
