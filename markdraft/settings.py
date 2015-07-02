@@ -29,7 +29,9 @@ ALLOWED_HOSTS = []
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
-LOGIN_REDIRECT_URL = 'index'
+LOGIN_REDIRECT_URL = 'dashboard'
+
+LOGIN_URL = 'login'
 
 # Application definition
 
