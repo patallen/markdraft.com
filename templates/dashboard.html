@@ -1,1 +1,7 @@
 This is the restricted dashboard.
+
+{% for draft in object_list %}
+<div class="col-md-4 well">
+{{ draft.current_title }}
+</div>
+{% endfor %}

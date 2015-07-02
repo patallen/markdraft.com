@@ -1,6 +1,7 @@
 from django.views.generic.edit import CreateView
-from django.views.generic import TemplateView
+from django.views.generic import ListView
 from registration.forms import RegistrationForm
+from drafts.models import Draft
 
 
 class SignupView(CreateView):
@@ -9,5 +10,10 @@ class SignupView(CreateView):
     success_url = '/'
 
 
-class DashboardView(TemplateView):
+class DashboardView(ListView):
     template_name = 'dashboard.html'
+    model = Draft
+
+    def get_queryset(self):
+        user = self.request.user
+        return Draft.objects.filter(user=user)
