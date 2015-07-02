@@ -3,10 +3,14 @@ from drafts.forms import LoginForm
 from registration.forms import RegistrationForm
 
 
-class IndexView(FormView):
+class LoginView(FormView):
     form_class = LoginForm
-    template_name = 'index.html'
+    template_name = 'login.html'
     success_url = '/'
+    
+    def form_valid(self, form):
+        print("cookies")
+        return super(LoginView, self).form_valid(form)
 
 
 class SignupView(CreateView):

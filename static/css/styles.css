@@ -112,3 +112,8 @@ h2.header {
 	margin: 20px 0;
 }
 form {display: inline;}
+
+/* General helper classes */
+.top-buffer{
+	margin-top: 20px;
+}

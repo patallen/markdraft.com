@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 {% load staticfiles %}
 {% load tags %}
-{% load crispy_forms_tags %}
 <html>
 	<head>
 		<link href='http://fonts.googleapis.com/css?family=Dynalight' rel='stylesheet' type='text/css'>
@@ -16,9 +15,11 @@
 		<div class="navbrand">
 			<a href="{% url "index" %}">Markdraft</a>
 		</div>
-		{% crispy form %}
 		<div class="navigation">
 			<ul>
+				<li>
+					<a class="{% navactive request "login"  %}" href="{% url "login" %}">Log In</a>
+				</li>
 				<li>
 					<a class="{% navactive request "signup"  %}" href="{% url "signup" %}">Sign up</a>
 				</li>
