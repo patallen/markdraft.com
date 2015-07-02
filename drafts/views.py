@@ -1,7 +1,7 @@
 from django.views.generic.edit import CreateView
 from django.views.generic import ListView
 from registration.forms import RegistrationForm
-from drafts.models import Draft
+from drafts.models import Document
 
 
 class SignupView(CreateView):
@@ -16,4 +16,4 @@ class DashboardView(ListView):
 
     def get_queryset(self):
         user = self.request.user
-        return Draft.objects.filter(user=user)
+        return Document.objects.filter(user=user)
