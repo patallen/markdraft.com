@@ -1,5 +1,5 @@
 from django.views.generic.edit import CreateView
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 from registration.forms import RegistrationForm
 from drafts.models import Document, Draft
 
@@ -34,3 +34,12 @@ class CreateDocumentView(CreateView):
         draft.version = 1
         self.object = draft.save()
         return super(CreateDocumentView, self).form_valid(form)
+
+
+class DocumentDetailView(DetailView):
+    template_name = "view.html"
+    model = Document
+    slug_field = 'hashid'
+
+    def get_object(self):
+        return Document.objects.get(hashid=self.kwargs['hashid'])

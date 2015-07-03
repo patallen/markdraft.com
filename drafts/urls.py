@@ -14,4 +14,5 @@ urlpatterns = [
         login_required(views.DashboardView.as_view()),
         name='dashboard'),
     url(r'^create/$', views.CreateDocumentView.as_view(), name='create_document'),
+    url(r'^doc/(?P<hashid>[\w{}.-]{3})/$', views.DocumentDetailView.as_view(), name='view_document'),
 ]
