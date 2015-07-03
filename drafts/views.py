@@ -26,10 +26,11 @@ class CreateDocumentView(CreateView):
     success_url = '/'
 
     def form_valid(self, form):
-        doc = Document(user=self.request.user)
+        doc = Document.objects.create(user=self.request.user)
+        doc.update_hashid()
         doc.save()
         draft = form.save(commit=False)
         draft.document = doc
         draft.version = 1
         self.object = draft.save()
-        return super(CreateView, self).form_valid(form)
+        return super(CreateDocumentView, self).form_valid(form)

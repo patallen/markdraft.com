@@ -2,6 +2,6 @@ Your Documents:
 
 {% for document in object_list %}
 <div class="col-md-4 well">
-{{ document.latest_draft.title }}
+{{ document.latest_draft.title }} {{ document.hashid }}
 </div>
 {% endfor %}
