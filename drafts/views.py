@@ -1,5 +1,6 @@
 from django.views.generic.edit import CreateView
 from django.views.generic import ListView, DetailView
+from django.shortcuts import get_object_or_404
 from registration.forms import RegistrationForm
 from drafts.models import Document, Draft
 
@@ -34,6 +35,29 @@ class CreateDocumentView(CreateView):
         draft.version = 1
         self.object = draft.save()
         return super(CreateDocumentView, self).form_valid(form)
+
+
+class EditDocumentView(CreateDocumentView):
+    template_name = 'edit.html'
+
+    def get_initial(self):
+        return {'text': self.document.latest_draft.text}
+
+    def get_context_data(self, **kwargs):
+        context = super(EditDocumentView, self).get_context_data(**kwargs)
+        context['document'] = self.document
+        return context
+
+    def dispatch(self, *args, **kwargs):
+        self.document = get_object_or_404(Document, hashid=kwargs['hashid'])
+        return super(EditDocumentView, self).dispatch(*args, **kwargs)
+
+    def form_valid(self, form):
+        draft = form.save(commit=False)
+        draft.document = self.document 
+        draft.version = self.document.latest_draft.version + 1
+        self.object = draft.save()
+        return super(CreateView, self).form_valid(form)
 
 
 class DocumentDetailView(DetailView):

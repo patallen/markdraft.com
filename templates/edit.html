@@ -1,0 +1,5 @@
+<form action="{% url "edit_document" hashid=document.hashid %}" method=POST>
+	{% csrf_token %}
+	{{ form }}
+	<input type='submit' value='Save Document' />
+</form>
