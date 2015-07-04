@@ -40,6 +40,7 @@ body {
 			text-decoration: none;
 			padding: 0 20px;
 			transition: .2s;
+			&.active { background-color: black }
 		}
 		ul {
 			margin: 0;
