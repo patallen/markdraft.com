@@ -23,7 +23,7 @@ class CreateDocumentView(CreateView):
     template_name = 'create.html'
     model = Draft
     fields = ['text']
-    success_url = '/'
+    success_url = '/dashboard'
 
     def form_valid(self, form):
         doc = Document.objects.create(user=self.request.user)
