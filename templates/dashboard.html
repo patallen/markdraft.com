@@ -1,7 +1,9 @@
+<a href="{% url "create_document" %}">Create New Document</a><br />
 Your Documents:
 
 {% for document in object_list %}
 <div class="col-md-4 well">
-{{ document.latest_draft.title }} {{ document.hashid }}
+	{{ document.latest_draft.title }} 
+	<a href="{% url "view_document" hashid=document.hashid %}">View</a>
 </div>
 {% endfor %}
