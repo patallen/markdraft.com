@@ -3,16 +3,14 @@ $(document).ready(function() {
 	  	$('#md-preview').html(marked($('#md-input').val()))
 	};
 	var highlightCode = function(){
-		$('pre code').each(function(block) {
-	    	hljs.highlightBlock(block);
-	  	});
+		$('pre code').each(function(i, block){
+			hljs.highlightBlock(block);
+		});
 	};
-	loadToPreview()
+	loadToPreview();
+	highlightCode();
 	$('#md-input').keyup(function(){
-		highlightCode();
 		loadToPreview();
+		highlightCode();
 	});
 });
-
-
-	
