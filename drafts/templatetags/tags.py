@@ -9,3 +9,7 @@ def navactive(request, urls):
     if request.path in (reverse(url) for url in urls.split()):
         return 'active'
     return ''
+
+@register.simple_tag
+def field(boundfield, **kwargs):
+	return boundfield.as_widget(attrs=kwargs)
