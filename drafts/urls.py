@@ -5,9 +5,9 @@ from . import views
 from django.contrib.auth.decorators import login_required
 
 urlpatterns = [
-    url(r'^$', TemplateView.as_view(template_name='index.html'), name='index'),
+    url(r'^$', TemplateView.as_view(template_name='public/index.html'), name='index'),
     url(r'^login/$', auth_views.login,
-        {'template_name': 'login.html'},
+        {'template_name': 'public/login.html'},
         name='login'),
     url(r'^logout/$', auth_views.logout, {'next_page': '/'}, name='logout'),
     url(r'^signup/$', views.SignupView.as_view(), name='signup'),

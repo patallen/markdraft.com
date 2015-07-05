@@ -6,13 +6,13 @@ from drafts.models import Document, Draft
 
 
 class SignupView(CreateView):
-    template_name = 'signup.html'
+    template_name = 'public/signup.html'
     form_class = RegistrationForm
     success_url = '/'
 
 
 class DashboardView(ListView):
-    template_name = 'dashboard.html'
+    template_name = 'drafts/dashboard.html'
     model = Draft
 
     def get_queryset(self):
@@ -21,7 +21,7 @@ class DashboardView(ListView):
 
 
 class CreateDocumentView(CreateView):
-    template_name = 'create.html'
+    template_name = 'drafts/create.html'
     model = Draft
     fields = ['text']
     success_url = '/dashboard'
@@ -38,7 +38,7 @@ class CreateDocumentView(CreateView):
 
 
 class EditDocumentView(CreateDocumentView):
-    template_name = 'edit.html'
+    template_name = 'drafts/edit.html'
 
     def get_initial(self):
         return {'text': self.document.latest_draft.text}
@@ -54,14 +54,14 @@ class EditDocumentView(CreateDocumentView):
 
     def form_valid(self, form):
         draft = form.save(commit=False)
-        draft.document = self.document 
+        draft.document = self.document
         draft.version = self.document.latest_draft.version + 1
         self.object = draft.save()
         return super(CreateView, self).form_valid(form)
 
 
 class DocumentDetailView(DetailView):
-    template_name = "view.html"
+    template_name = "drafts/view.html"
     model = Document
     slug_field = 'hashid'
 
