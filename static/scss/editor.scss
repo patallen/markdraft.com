@@ -1,0 +1,29 @@
+.markdraft-editor {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  font-family: "Open Sans", sans-serif;
+}
+
+#md-preview,
+#md-input {
+  box-sizing: border-box;
+  min-height: 100%;
+  height: 100%;
+  width: 50%;
+  padding: 0;
+  margin: 0;
+  display: inline;
+  padding-left: 10px;
+}
+
+#md-input {
+  resize: none;
+  background-color: lightgray;
+}
+
+#md-preview {
+  float: right;
+  overflow-y: scroll;
+}
