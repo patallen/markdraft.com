@@ -13,4 +13,8 @@ $(document).ready(function() {
 		loadToPreview();
 		highlightCode();
 	});
+
+	$('#editor-save').click(function(){
+		$('#editor-form').submit();
+	});
 });

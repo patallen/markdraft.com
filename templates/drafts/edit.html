@@ -7,7 +7,7 @@
 		<link rel="stylesheet" href="{% static "css/editor.css" %}">
 		{% endblock %}
 		{% block content %}
-		<form action="." method=POST>
+		<form id="editor-form" action="." method=POST>
 			{% csrf_token %}
 			<div class="markdraft-editor">
 				{% field form.text id="md-input" %}
