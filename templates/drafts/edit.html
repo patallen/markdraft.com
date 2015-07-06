@@ -1,11 +1,12 @@
+{% extends '_base_drafts.html' %}
 {% load staticfiles %}
 {% load tags %}
-<html>
-	<head>
+		{% block stylesheets %}
+		{{ block.super }}
 		<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/default.min.css">
 		<link rel="stylesheet" href="{% static "css/editor.css" %}">
-	</head>
-	<body>
+		{% endblock %}
+		{% block content %}
 		<form action="." method=POST>
 			{% csrf_token %}
 			<div class="markdraft-editor">
@@ -14,10 +15,12 @@
 				</div>
 			</div>
 		</form>
-
+		{% endblock %}
+		{% block javascript %}
 		<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.js"></script>
 		<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
 		<script src="{% static "js/editor.js" %}"></script>
+		{% endblock %}
 	</body>
 </html>
