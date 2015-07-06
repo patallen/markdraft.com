@@ -1,6 +1,18 @@
 {% extends '_base.html' %}
+{% load staticfiles %}
+{% block stylesheets %}
+{{ block.super }}
+<link href="{% static "css/style.css" %}" rel="stylesheet">
+{% endblock %}
 {% block body %}
-<nav class="navbar navbar-default navbar-fixed-top">
+<nav class="navbar navbar-inverse navbar-fixed-top">
+	<ul class="nav navbar-nav">
+		<li><a href="{% url "dashboard" %}">Dashboard</a></li>
+	</ul>
+	<ul class="nav navbar-nav pull-right">
+		<li><button class='btn btn-primary navbar-btn'>Save</button><li>
+		<li><button class='btn btn-primary navbar-btn'>Save and Exit</button></li>
+	</ul>
 </nav>
 {% block content %}{% endblock %}
 {% endblock %}
