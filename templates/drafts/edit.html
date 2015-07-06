@@ -6,7 +6,7 @@
 		<link rel="stylesheet" href="{% static "css/editor.css" %}">
 	</head>
 	<body>
-		<form action="{% url "edit_document" hashid=document.hashid %}" method=POST>
+		<form action="." method=POST>
 			{% csrf_token %}
 			<div class="markdraft-editor">
 				{% field form.text id="md-input" %}
