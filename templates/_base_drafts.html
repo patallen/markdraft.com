@@ -6,7 +6,7 @@
 {% endblock %}
 {% block body %}
 <nav class="navbar navbar-inverse navbar-fixed-top">
-	<ul class="nav navbar-nav">
+	<ul class="nav navbar-nav pull-left">
 		<li><a href="{% url "dashboard" %}">Dashboard</a></li>
 	</ul>
 	{% if '/edit' in request.get_full_path %}
