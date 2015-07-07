@@ -86,7 +86,10 @@ section {
 
 /* Drafts (Internal) Styles */
 .navbar-nav {
-	button {
-		margin-right: 10px !important;
+	button{
+		margin-right: 15px !important;
+	}
+	p.navbar-btn {
+		margin-right: 15px;
 	}
 }

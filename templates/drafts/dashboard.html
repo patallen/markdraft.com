@@ -1,9 +1,17 @@
-<a href="{% url "create_document" %}">Create New Document</a><br />
-Your Documents:
+{% extends '_base_drafts.html' %}
+{% load staticfiles %}
+{% load tags %}
+{% block content%}
+<div class="container-fluid">
+	<a href="{% url "create_document" %}">Create New Document</a><br />
+	Your Documents:
+	<br>
 
-{% for document in object_list %}
-<div class="col-md-4 well">
-	{{ document.latest_draft.title }} 
-	<a href="{% url "view_document" hashid=document.hashid %}">View</a>
+	{% for document in object_list %}
+	<div class="col-md-4 well">
+		{{ document.latest_draft.title }} 
+		<a href="{% url "view_document" hashid=document.hashid %}">View</a>
+	</div>
+	{% endfor %}
 </div>
-{% endfor %}
+{% endblock %}
