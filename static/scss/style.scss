@@ -97,3 +97,28 @@ section {
 .navbar-form.edit-title {
 	width: 400px;
 }
+
+#drawer {
+	padding-top: 50px;
+	position: fixed;
+	right: 0;
+	top: 0;
+	background: #222;
+	width: 300px;
+	height: 100%;
+	opacity: .9;
+	margin-right: -300px;
+	transition: .3s;
+	&.active{
+		margin-right: 0px;
+	}
+	#drawer-tab{
+		height: 50px;
+		position: relative;
+		width: 30px;
+		top: 50%;
+		margin-top: -25px;
+		margin-left: -30px;
+		background-color: black;
+	}
+}
