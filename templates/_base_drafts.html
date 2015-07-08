@@ -14,8 +14,8 @@
 	{% if form %}
 		{% field form.title class="form-control navbar-form edit-title pull-left" %}
 	{% endif %}
-
-	{% if '/edit' in request.get_full_path %}
+	
+	{% if '/edit' in request.get_full_path or '/create' in request.get_full_path %}
 	<ul class="nav navbar-nav pull-right">
 		<li><button class='btn btn-primary navbar-btn'>Save</button><li>
 		<li><button id="editor-save" class='btn btn-primary navbar-btn'>Save and Exit</button></li>

@@ -21,7 +21,7 @@ class DashboardView(ListView):
 
 
 class CreateDocumentView(CreateView):
-    template_name = 'drafts/create.html'
+    template_name = 'drafts/edit.html'
     model = Draft
     fields = ['title', 'text']
     success_url = '/dashboard'
