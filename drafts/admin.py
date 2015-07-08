@@ -9,8 +9,8 @@ class DraftInline(admin.TabularInline):
 
 class DocumentAdmin(admin.ModelAdmin):
     fieldsets = [
-        (None,              {'fields': ['hashid', 'user']}),
-        ('Document Info',   {'fields': ['date_created', 'latest_draft']}),
+        (None, {'fields': ['hashid', 'user']}),
+        ('Document Info', {'fields': ['date_created', 'latest_draft']}),
     ]
     inlines = [DraftInline]
     list_display = ('hashid', 'latest_draft', 'user', 'date_created')

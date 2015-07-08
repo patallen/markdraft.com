@@ -1,6 +1,6 @@
-from django.views.generic.edit import CreateView
-from django.views.generic import ListView, DetailView
 from django.shortcuts import get_object_or_404
+from django.views.generic import ListView, DetailView
+from django.views.generic.edit import CreateView
 from registration.forms import RegistrationForm
 from drafts.models import Document, Draft
 
