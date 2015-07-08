@@ -1,14 +1,20 @@
 {% extends '_base.html' %}
 {% load staticfiles %}
 {% block stylesheets %}
+{% load tags %}
 {{ block.super }}
 <link href="{% static "css/style.css" %}" rel="stylesheet">
 {% endblock %}
 {% block body %}
+{% block navbar %}
 <nav class="navbar navbar-inverse navbar-fixed-top">
 	<ul class="nav navbar-nav pull-left">
 		<li><a href="{% url "dashboard" %}">Dashboard</a></li>
 	</ul>
+	{% if form %}
+		{% field form.title class="form-control navbar-form edit-title pull-left" %}
+	{% endif %}
+
 	{% if '/edit' in request.get_full_path %}
 	<ul class="nav navbar-nav pull-right">
 		<li><button class='btn btn-primary navbar-btn'>Save</button><li>
@@ -20,5 +26,6 @@
 	</ul>
 	{% endif %}
 </nav>
+{% endblock %}
 {% block content %}{% endblock %}
 {% endblock %}

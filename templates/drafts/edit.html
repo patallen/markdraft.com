@@ -9,6 +9,9 @@
 		{% block content %}
 		<form id="editor-form" action="." method=POST>
 			{% csrf_token %}
+			{% block navbar %}
+			{{ block.super }}
+			{% endblock %}
 			<div class="markdraft-editor">
 				{% field form.text id="md-input" %}
 				<div id="md-preview">

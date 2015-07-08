@@ -24,14 +24,11 @@ class Document(models.Model):
 
 
 class Draft(models.Model):
+    title = models.CharField(max_length=140, blank=False, default="Untitled")
     text = models.TextField(blank=False)
     version = models.IntegerField(blank=False)
     date_created = models.DateTimeField(auto_now_add=True)
     document = models.ForeignKey(Document, related_name='drafts')
-
-    def _get_title(self):
-        return self.text.splitlines()[0]
-    title = property(_get_title)
 
     def __str__(self):
         return self.title

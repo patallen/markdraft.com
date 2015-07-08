@@ -23,7 +23,7 @@ class DashboardView(ListView):
 class CreateDocumentView(CreateView):
     template_name = 'drafts/create.html'
     model = Draft
-    fields = ['text']
+    fields = ['title', 'text']
     success_url = '/dashboard'
 
     def form_valid(self, form):
@@ -41,7 +41,10 @@ class EditDocumentView(CreateDocumentView):
     template_name = 'drafts/edit.html'
 
     def get_initial(self):
-        return {'text': self.document.latest_draft.text}
+        return {
+            'title': self.document.latest_draft.title,
+            'text': self.document.latest_draft.text
+        }
 
     def get_context_data(self, **kwargs):
         context = super(EditDocumentView, self).get_context_data(**kwargs)
@@ -51,13 +54,17 @@ class EditDocumentView(CreateDocumentView):
     def dispatch(self, *args, **kwargs):
         self.document = get_object_or_404(Document, hashid=kwargs['hashid'])
         return super(EditDocumentView, self).dispatch(*args, **kwargs)
+    
+    def form_invalid(self, form):
+        print(form.errors)
+        return super(CreateDocumentView, self).form_invalid(form)
 
     def form_valid(self, form):
         draft = form.save(commit=False)
         draft.document = self.document
         draft.version = self.document.latest_draft.version + 1
         self.object = draft.save()
-        return super(CreateView, self).form_valid(form)
+        return super(CreateDocumentView, self).form_valid(form)
 
 
 class DocumentDetailView(DetailView):
