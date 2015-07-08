@@ -9,12 +9,20 @@
 		{% block content %}
 		<form id="editor-form" action="." method=POST>
 			{% csrf_token %}
+			{% block navbar %}
+			{{ block.super }}
+			{% endblock %}
 			<div class="markdraft-editor">
 				{% field form.text id="md-input" %}
 				<div id="md-preview">
 				</div>
 			</div>
 		</form>
+		<div id=drawer>
+			<div id="drawer-tab">
+			</div>
+
+		</div>
 		{% endblock %}
 		{% block javascript %}
 		<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>

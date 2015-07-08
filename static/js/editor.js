@@ -17,4 +17,8 @@ $(document).ready(function() {
 	$('#editor-save').click(function(){
 		$('#editor-form').submit();
 	});
+
+	$('#drawer-tab').click(function(){
+		$(this).parent().toggleClass('active');
+	});
 });
