@@ -3,14 +3,15 @@ from django.views.generic import TemplateView
 from django.contrib.auth import views as auth_views
 from . import views
 from django.contrib.auth.decorators import login_required
+from drafts.decorators import anonymous_required
 
 urlpatterns = [
     url(r'^$', TemplateView.as_view(template_name='public/index.html'), name='index'),
-    url(r'^login/$', auth_views.login,
+    url(r'^login/$', anonymous_required(auth_views.login),
         {'template_name': 'public/login.html'},
         name='login'),
-    url(r'^logout/$', auth_views.logout, {'next_page': '/'}, name='logout'),
-    url(r'^signup/$', views.SignupView.as_view(), name='signup'),
+    url(r'^logout/$', login_required(auth_views.logout), {'next_page': '/'}, name='logout'),
+    url(r'^signup/$', anonymous_required(views.SignupView.as_view()), name='signup'),
     url(r'^dashboard/$',
         login_required(views.DashboardView.as_view()),
         name='dashboard'),
