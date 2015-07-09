@@ -1,6 +1,7 @@
 from registration.forms import RegistrationForm
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit
+from crispy_forms.layout import Layout
+from crispy_forms.bootstrap import StrictButton
 
 
 class HorizontalRegForm(RegistrationForm):
@@ -17,4 +18,11 @@ class HorizontalRegForm(RegistrationForm):
         self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-lg-2'
         self.helper.field_class = 'col-lg-8'
-        self.helper.add_input(Submit('submit', 'Sign Me Up!', css_class='btn btn-default'))
+        self.helper.layout = Layout(
+            'username',
+            'email',
+            'password1',
+            'password2',
+            StrictButton('Sign Me Up!', type="submit",
+                         css_class='btn-default')
+        )
