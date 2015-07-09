@@ -1,14 +1,13 @@
 from django.conf.urls import url
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.decorators import login_required
-from django.views.generic import TemplateView
 
 from . import views
 from drafts.decorators import anonymous_required
 
 urlpatterns = [
     url(r'^$',
-        TemplateView.as_view(template_name='public/index.html'),
+        views.IndexView.as_view(template_name='public/index.html'),
         name='index'
         ),
     url(r'^login/$',

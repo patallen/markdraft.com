@@ -3,12 +3,18 @@ from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView
 from registration.forms import RegistrationForm
 from drafts.models import Document, Draft
+from drafts.forms import HorizontalRegForm
 
 
 class SignupView(CreateView):
     template_name = 'public/signup.html'
     form_class = RegistrationForm
-    success_url = '/'
+    success_url = '/dashboard'
+
+
+class IndexView(SignupView):
+    template_name = 'publix/index.html'
+    form_class = HorizontalRegForm
 
 
 class DashboardView(ListView):
@@ -54,7 +60,7 @@ class EditDocumentView(CreateDocumentView):
     def dispatch(self, *args, **kwargs):
         self.document = get_object_or_404(Document, hashid=kwargs['hashid'])
         return super(EditDocumentView, self).dispatch(*args, **kwargs)
-    
+
     def form_invalid(self, form):
         print(form.errors)
         return super(CreateDocumentView, self).form_invalid(form)
