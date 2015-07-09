@@ -19,12 +19,12 @@
 	<ul class="nav navbar-nav pull-right">
 		<li><button class='btn btn-primary navbar-btn'>Save</button><li>
 		<li><button id="editor-save" class='btn btn-primary navbar-btn'>Save and Exit</button></li>
-	</ul>
 	{% elif '/dashboard' in request.get_full_path %}
 	<ul class="nav navbar-nav pull-right">
 		<li><p class="navbar-btn"><a href="{% url "create_document" %}" class='btn btn-primary'>Create New</a></p></li>
-	</ul>
 	{% endif %}
+		<li><a href="{% url "logout" %}">Log Out</a></li>
+	</ul>
 </nav>
 {% endblock %}
 {% block content %}{% endblock %}
