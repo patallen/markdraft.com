@@ -13,4 +13,4 @@ class DocumentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Document
-        fields = ('hashid', 'latest_title')
+        fields = ('hashid', 'latest_title', 'date_created')

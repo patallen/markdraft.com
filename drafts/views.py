@@ -4,6 +4,8 @@ from django.views.generic.edit import CreateView
 from registration.forms import RegistrationForm
 from drafts.models import Document, Draft
 from drafts.forms import HorizontalRegForm
+from rest_framework import generics
+from drafts.serializers import DocumentSerializer
 
 
 class SignupView(CreateView):
@@ -80,3 +82,11 @@ class DocumentDetailView(DetailView):
 
     def get_object(self):
         return Document.objects.get(hashid=self.kwargs['hashid'])
+
+
+class DocumentListResource(generics.ListCreateAPIView):
+    serializer_class = DocumentSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        return Document.objects.filter(user=user)

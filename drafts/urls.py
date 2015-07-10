@@ -38,4 +38,7 @@ urlpatterns = [
         views.EditDocumentView.as_view(),
         name='edit_document'
         ),
+
+    # API URLS
+    url(r'^api/docs/$', views.DocumentListResource.as_view(), name="list_docs")
 ]
