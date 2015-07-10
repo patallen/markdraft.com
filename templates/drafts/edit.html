@@ -19,13 +19,14 @@
 			</div>
 		</form>
 		<div id="drawer" ng-app="drawerApp">
+			<div id="drawer-tab">
+			</div>
 			<div id="inner-drawer" ng-controller="DrawerController">
 				<div class='doc-box' ng-repeat="doc in documents">
 				<a href="/doc/[[doc.hashid]]/edit/">[[ doc.latest_title ]]</a>
 				</div>
 			</div>
-			<div id="drawer-tab">
-			</div>
+			
 		</div>
 		{% endblock %}
 		{% block javascript %}
