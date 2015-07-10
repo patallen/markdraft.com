@@ -3,14 +3,12 @@
 {% load tags %}
 {% block content%}
 <div class="container-fluid">
-	<a href="{% url "create_document" %}">Create New Document</a><br />
-	Your Documents:
-	<br>
-
 	{% for document in object_list %}
-	<div class="col-md-4 well">
-		{{ document.latest_draft.title }} 
-		<a href="{% url "view_document" hashid=document.hashid %}">View</a>
+	<div class="col-lg-2 col-md-4 col-sm-6 col-xs-12">
+		<div class="well">
+			{{ document.latest_draft.title }} 
+			<a href="{% url "edit_document" hashid=document.hashid %}">Edit</a>
+		</div>
 	</div>
 	{% endfor %}
 </div>

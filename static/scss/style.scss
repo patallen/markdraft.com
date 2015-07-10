@@ -97,7 +97,7 @@ section {
 }
 
 #drawer {
-	padding-top: 50px;
+	padding-top: 54px;
 	position: fixed;
 	right: 0;
 	top: 0;
@@ -109,6 +109,16 @@ section {
 	transition: .3s;
 	&.active{
 		margin-right: 0px;
+	}
+	.doc-box { 
+		height: 30px;
+		width: 100%;
+		color: white;
+		padding: 4px 10px;
+		a {
+			color: white;
+			line-height: 30px;
+		}
 	}
 	#drawer-tab{
 		height: 50px;
