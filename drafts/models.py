@@ -14,6 +14,10 @@ class Document(models.Model):
         return self.drafts.order_by('-version').first()
     latest_draft = property(_get_latest_draft)
 
+    def _get_latest_title(self):
+        return self.drafts.order_by('-version').first().title
+    latest_title = property(_get_latest_title)
+
     def _get_date_created(self):
         return self.drafts.order_by('version').first().date_created
     date_created = property(_get_date_created)

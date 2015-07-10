@@ -46,6 +46,7 @@ INSTALLED_APPS = (
     # Third party apps
     'registration',
     'crispy_forms',
+    'rest_framework',
     # My apps
     'drafts',
 )
