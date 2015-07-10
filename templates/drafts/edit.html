@@ -22,7 +22,7 @@
 			<div id="drawer-tab">
 			</div>
 			<div id="inner-drawer" ng-controller="DrawerController">
-				<div class='doc-box' ng-repeat="doc in documents">
+				<div class='doc-box' ng-repeat="doc in documents | orderBy: '-date_created'">
 				<a href="/doc/[[doc.hashid]]/edit/">[[ doc.latest_title ]]</a>
 				</div>
 			</div>
