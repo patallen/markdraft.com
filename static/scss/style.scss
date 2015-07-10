@@ -61,24 +61,19 @@ body {
 
 section {
 	.description {
-		margin-top: 40px;
+		margin-top: 50px;
 		p {
-			font-size: 1.1em;
+			font-size: 1.3em;
 		}
 	}
 	&.action {
 		text-align: center;
 		padding: 20px 0;
-		&.top-row {
-			padding: 60px 0;
-		}
 	}
 	&:first-of-type {
 		color: white;
 		background-color: #E84C3D;
-		.scratch {
-			fill: white;
-		}
+		padding: 70px 0;
 	}
 	.box {
 		margin-top: 20px;

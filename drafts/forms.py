@@ -24,8 +24,10 @@ class HorizontalRegForm(RegistrationForm):
             Field('password1', css_class="input-lg"),
             Field('password2', css_class="input-lg"),
             Div(
-                StrictButton('Sign Me Up!', type="submit",
-                             css_class='btn-lg btn-default btn-block'),
-                css_class="col-md-offset-3 col-md-8"
+                Div(
+                    StrictButton('Sign Me Up!', type="submit",
+                                css_class='btn-lg btn-default btn-block'),
+                    css_class="col-md-offset-3 col-md-8"
+                ), css_class="row"
             )
         )
