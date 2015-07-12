@@ -27,5 +27,15 @@
 			</ul>
 		</div>
 	</nav>
+	<div id="#holder">
 	{% block content %}{% endblock %}
+	</div>
+	{% block footer %}
+	<footer class="public-footer">
+		<div class="container">
+			<p class="pull-left">Markdraft.com 2015</p>
+			<p class="pull-right">About | Privacy | Terms</p>
+		</div>
+	</footer>
+	{% endblock %}
 	{% endblock %}
