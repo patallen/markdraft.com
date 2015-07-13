@@ -4,10 +4,12 @@
 {% block content%}
 <div class="container-fluid">
 	{% for document in object_list %}
-	<div class="col-lg-2 col-md-4 col-sm-6 col-xs-12">
-		<div class="well">
-			{{ document.latest_draft.title }} 
-			<a href="{% url "edit_document" hashid=document.hashid %}">Edit</a>
+	<div class="col-md-4 col-sm-6 col-xs-12">
+		<div data-docid="{{ document.hashid }}" class="document well">
+			<span class="glyphicon glyphicon-star is-starred"></span> {{ document.latest_draft.title }}
+			<div class="document-options pull-right">
+				<a href="{% url "edit_document" hashid=document.hashid %}">Edit</a>
+			</div>
 		</div>
 	</div>
 	{% endfor %}
