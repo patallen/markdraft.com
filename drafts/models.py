@@ -5,6 +5,7 @@ from hashids import Hashids
 
 class Document(models.Model):
     hashid = models.CharField(max_length=10, db_index=True, blank=False)
+    starred = models.BooleanField(default=False)
     user = models.ForeignKey(User)
 
     def __str__(self):
