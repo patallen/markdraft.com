@@ -1,4 +1,21 @@
 $(function(){
+	toastr.options = {
+	  "closeButton": false,
+	  "debug": false,
+	  "newestOnTop": false,
+	  "progressBar": false,
+	  "positionClass": "toast-bottom-right",
+	  "preventDuplicates": false,
+	  "onclick": null,
+	  "showDuration": "300",
+	  "hideDuration": "1000",
+	  "timeOut": "2000",
+	  "extendedTimeOut": "1000",
+	  "showEasing": "swing",
+	  "hideEasing": "linear",
+	  "showMethod": "fadeIn",
+	  "hideMethod": "fadeOut"
+	}
 	function getCookie(name) {
 		var cookieValue = null;
 		if (document.cookie && document.cookie != '') {
@@ -26,7 +43,14 @@ $(function(){
 				hashid: docid, csrfmiddlewaretoken: csrftoken,
 			},
 			success: function(){
-				$this.toggleClass('is-starred');	
+				$this.toggleClass('is-starred');
+				var status;
+				if ($this.hasClass('is-starred')){
+					status = 'starred';
+				} else {
+					status = 'unstarred';
+				}
+				toastr.success("Successfully " + status + " " + docid +"!");	
 			}
 		});
 	});
