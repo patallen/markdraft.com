@@ -94,7 +94,8 @@ section {
 	}
 }
 .document {
-	.glyphicon {
+	.star{
+		cursor: pointer;
 		font-size: 1.3em;
 		color: lightgrey;
 		&.is-starred {
