@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404
-from django.http import HttpResponse 
+from django.http import HttpResponse
 from django.views.generic import ListView, DetailView, View
 from django.views.generic.edit import CreateView
 from registration.forms import RegistrationForm
@@ -26,7 +26,7 @@ class DashboardView(ListView):
 
     def get_queryset(self):
         user = self.request.user
-        return Document.objects.filter(user=user)
+        return Document.objects.filter(user=user).order_by('-starred', '-id')
 
 
 class CreateDocumentView(CreateView):
@@ -100,8 +100,6 @@ class AjaxStarView(View):
         if doc.user != request.user:
             return HttpResponse('Not authorized to star that.', 401)
 
-        doc.starred = not doc.starred 
+        doc.starred = not doc.starred
         doc.save()
         return HttpResponse('Starring successful.', 200)
-    
-
