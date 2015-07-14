@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404
-from django.views.generic import ListView, DetailView
+from django.http import HttpResponse 
+from django.views.generic import ListView, DetailView, View
 from django.views.generic.edit import CreateView
 from registration.forms import RegistrationForm
 from drafts.models import Document, Draft
@@ -15,7 +16,7 @@ class SignupView(CreateView):
 
 
 class IndexView(SignupView):
-    template_name = 'publix/index.html'
+    template_name = 'public/index.html'
     form_class = HorizontalRegForm
 
 
@@ -90,3 +91,17 @@ class DocumentListResource(generics.ListCreateAPIView):
     def get_queryset(self):
         user = self.request.user
         return Document.objects.filter(user=user)
+
+
+class AjaxStarView(View):
+
+    def post(self, request, *args, **kwargs):
+        doc = get_object_or_404(Document, hashid=request.POST['hashid'])
+        if doc.user != request.user:
+            return HttpResponse('Not authorized to star that.', 401)
+
+        doc.starred = not doc.starred 
+        doc.save()
+        return HttpResponse('Starring successful.', 200)
+    
+

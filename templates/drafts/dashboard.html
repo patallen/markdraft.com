@@ -6,7 +6,7 @@
 	{% for document in object_list %}
 	<div class="col-md-4 col-sm-6 col-xs-12">
 		<div data-docid="{{ document.hashid }}" class="document well">
-			<span class="glyphicon glyphicon-star is-starred"></span> {{ document.latest_draft.title }}
+			<span class="star glyphicon glyphicon-star is-starred"></span> {{ document.latest_draft.title }}
 			<div class="document-options pull-right">
 				<a href="{% url "edit_document" hashid=document.hashid %}">Edit</a>
 			</div>
@@ -14,4 +14,39 @@
 	</div>
 	{% endfor %}
 </div>
+{% endblock %}
+{% block javascript %}
+{{ block.super }}
+<script>
+$(function(){
+	function getCookie(name) {
+		var cookieValue = null;
+		if (document.cookie && document.cookie != '') {
+			var cookies = document.cookie.split(';');
+			for (var i = 0; i < cookies.length; i++) {
+				var cookie = jQuery.trim(cookies[i]);
+				// Does this cookie string begin with the name we want?
+				if (cookie.substring(0, name.length + 1) == (name + '=')) {
+					cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+					break;
+				}
+			}
+		}
+		return cookieValue;
+	}
+	var csrftoken = getCookie('csrftoken');
+
+	$this = $('span.star');
+	$this.click(function(){
+		docid = $this.parent().data('docid')
+		$.ajax({
+			url: '/star_document/',
+			method: 'POST',
+			data: {
+				hashid: docid, csrfmiddlewaretoken: csrftoken,
+			},
+		});
+	});
+});
+</script>
 {% endblock %}

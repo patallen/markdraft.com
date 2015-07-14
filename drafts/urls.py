@@ -40,5 +40,8 @@ urlpatterns = [
         ),
 
     # API URLS
-    url(r'^api/docs/$', views.DocumentListResource.as_view(), name="list_docs")
+    url(r'^api/docs/$', views.DocumentListResource.as_view(), name="list_docs"),
+
+    # AJAX URLS
+    url(r'^star_document/$', views.AjaxStarView.as_view(), name="star_document"),
 ]
