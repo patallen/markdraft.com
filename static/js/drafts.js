@@ -16,9 +16,9 @@ $(function(){
 	}
 	var csrftoken = getCookie('csrftoken');
 
-	$this = $('span.star');
-	$this.click(function(){
-		docid = $this.parent().data('docid')
+	$('span.star').click(function(){
+		$this = $(this);
+		docid = $this.parent().data('docid');
 		$.ajax({
 			url: '/star_document/',
 			method: 'POST',
