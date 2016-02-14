@@ -1,0 +1,29 @@
+site:
+    restart: always
+    build: ./site
+    expose:
+        - "8000"
+    links:
+        - postgres
+    volumes:
+        - /usr/src/app/static
+    env_file: .env
+    command: python app.py
+
+nginx:
+    restart: always
+    build: ./nginx/
+    ports:
+        - "80:80"
+    volumes:
+        - /www/static
+    volumes_from:
+        - site
+    links:
+        - site:site
+
+postgres:
+    restart: always
+    image: postgres:latest
+    ports:
+        - "5432:5432"
