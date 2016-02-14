@@ -16,10 +16,10 @@ class BaseMixin(object):
         primary_key = False
         for key in ['uid', 'id']:
             if hasattr(self, key):
-                primary_key = True
+                primary_key = key
                 break
 
-        if primary_key:
+        if primary_key and getattr(self, primary_key):
             db.session.merge(self)
         else:
             db.session.add(self)
