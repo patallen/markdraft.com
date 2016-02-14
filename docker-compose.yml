@@ -6,7 +6,9 @@ site:
     volumes:
         - .:/app
     env_file: .env
-    command: python app/app.py
+    command: python app/manage.py runserver
+    links:
+        - db
 
 nginx:
     build: ./nginx/
@@ -19,3 +21,6 @@ nginx:
         - site
     links:
         - site:site
+
+db:
+    image: postgres
