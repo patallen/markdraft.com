@@ -8,7 +8,7 @@ site:
     env_file: .env
     command: python app/manage.py runserver
     links:
-        - db
+        - postgres
 
 nginx:
     build: ./nginx/
@@ -22,5 +22,12 @@ nginx:
     links:
         - site:site
 
-db:
-    image: postgres
+postgres:
+    image: postgres:9.5
+    environment:
+        POSTGRES_USER: markdraft
+        POSTGRES_PASSWORD: markdraft
+    ports:
+        - 5432:5432
+    volumes:
+        - ~/.docker-volumes/markdraft/postgresql/data:/var/lib/postgresql/data
