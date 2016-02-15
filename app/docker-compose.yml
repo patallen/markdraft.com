@@ -1,0 +1,31 @@
+site:
+    restart: always
+    build: .
+    expose:
+        - "8000"
+    volumes:
+        - .:/app
+    env_file: .env
+    command: python manage.py runserver
+    links:
+        - postgres
+
+nginx:
+    build: ../nginx/
+    restart: always
+    ports:
+        - "80:80"
+    volumes:
+        - /www/static
+    volumes_from:
+        - site
+    links:
+        - site:site
+
+postgres:
+    image: postgres:9.5
+    environment:
+        POSTGRES_USER: markdraft
+        POSTGRES_PASSWORD: markdraft
+    ports:
+        - 5432:5432
