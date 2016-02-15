@@ -9,6 +9,9 @@ class Document(AuditMixin, BaseMixin, db.Model):
 
     drafts = db.relationship('Draft', backref='documents', lazy='dynamic')
 
+    def user_is_owner(self, user):
+        return self.user == user
+
 
 class Draft(AuditMixin, BaseMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -16,4 +19,3 @@ class Draft(AuditMixin, BaseMixin, db.Model):
     version = db.Column(db.Integer, nullable=False)
     title = db.Column(db.String(120))
     body = db.Column(db.String())
-

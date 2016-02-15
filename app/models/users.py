@@ -9,4 +9,7 @@ class User(BaseMixin, db.Model):
     username = db.Column(db.String(), unique=True)
     email = db.Column(db.String(), unique=True)
 
+    def owns_document(self, document):
+        return document in self.documents
+
     documents = db.relationship('Document', backref='user', lazy='dynamic')
