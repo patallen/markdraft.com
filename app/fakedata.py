@@ -44,7 +44,7 @@ def fake_shares(verbose=False):
         for _ in range(random_int(high=10)):
             doc = docs[random_int(high=length-1)]
             if doc not in user.documents.all():
-                Share.create_share(user, doc, True, True, commit=False)
+                Share.create_or_update(user, doc, True, True, commit=False)
         if verbose:
             print "Shares for users %s/%s" % (count, len(users))
     db.session.commit()

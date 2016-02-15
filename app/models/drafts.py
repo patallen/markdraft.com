@@ -39,7 +39,7 @@ class Share(BaseMixin, db.Model):
     unique = db.UniqueConstraint()
 
     @classmethod
-    def create_share(
+    def create_or_update(
         cls,
         user,
         entity,
@@ -47,13 +47,19 @@ class Share(BaseMixin, db.Model):
         write=False,
         commit=True,
     ):
-        attrs = dict(
-            document_id=entity.id,
-            user_id=user.id,
-            read=read,
-            write=write,
-        )
-        share = Share(attrs)
+        share = cls.query.filter_by(user_id=user.id) \
+            .filter_by(document_id=entity.id).first()
+
+        if share:
+            share.update_attributes({"read": read, "write": write})
+        else:
+            attrs = dict(
+                document_id=entity.id,
+                user_id=user.id,
+                read=read,
+                write=write,
+            )
+            share = Share(attrs)
         share.save(commit=commit)
 
         return share
