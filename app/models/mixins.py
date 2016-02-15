@@ -35,5 +35,14 @@ class BaseMixin(object):
 
         return True
 
+    def __init__(self, data=None):
+        if data is not None:
+            self.update_attributes(data)
+
+    def update_attributes(self, data):
+        for k, v in data.iteritems():
+            if hasattr(self, k):
+                setattr(self, k, v)
+
     def get(self, key, default=None):
         return getattr(self, key) or default

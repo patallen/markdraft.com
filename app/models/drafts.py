@@ -28,7 +28,32 @@ class Draft(AuditMixin, BaseMixin, db.Model):
 
 class Share(BaseMixin, db.Model):
     uid = db.Column(GUID(), primary_key=True, default=uuid4)
-    document_uid = db.Column(db.Integer, db.ForeignKey('document.id'))
-    user_uid = db.Column(db.Integer, db.ForeignKey('user.id'))
+    document_id = db.Column(
+        db.Integer,
+        db.ForeignKey('document.id'),
+        nullable=False
+    )
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     read = db.Column(db.Boolean, default=False, nullable=False)
     write = db.Column(db.Boolean, default=False, nullable=False)
+    unique = db.UniqueConstraint()
+
+    @classmethod
+    def create_share(
+        cls,
+        user,
+        entity,
+        read=True,
+        write=False,
+        commit=True,
+    ):
+        attrs = dict(
+            document_id=entity.id,
+            user_id=user.id,
+            read=read,
+            write=write,
+        )
+        share = Share(attrs)
+        share.save(commit=commit)
+
+        return share
