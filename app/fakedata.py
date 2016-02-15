@@ -1,6 +1,6 @@
 from models.users import User
 from faker import Factory
-from models.drafts import Document, Share
+from models.documents import Document, Share
 from marklib.helpers import random_int
 from models import db
 

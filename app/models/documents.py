@@ -14,6 +14,15 @@ class Document(AuditMixin, BaseMixin, db.Model):
     def user_is_owner(self, user):
         return self.user == user
 
+    def user_has_access(self, user, permission='read'):
+        if self.user_is_owner(user):
+            return True
+
+        share = Share.get_share(user, self)
+        if share:
+            return getattr(share, permission)
+        return False
+
 
 class Draft(AuditMixin, BaseMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -24,6 +33,15 @@ class Draft(AuditMixin, BaseMixin, db.Model):
 
     def user_is_owner(self, user):
         return self.document.user == user
+
+    def user_has_access(self, user, permission='read'):
+        if self.user_is_owner(user):
+            return True
+
+        share = Share.get_share(user, self.document)
+        if share:
+            return getattr(share, permission)
+        return False
 
 
 class Share(BaseMixin, db.Model):
@@ -47,8 +65,7 @@ class Share(BaseMixin, db.Model):
         write=False,
         commit=True,
     ):
-        share = cls.query.filter_by(user_id=user.id) \
-            .filter_by(document_id=entity.id).first()
+        share = cls.get_share(user=user, entity=entity)
 
         if share:
             share.update_attributes({"read": read, "write": write})
@@ -63,3 +80,11 @@ class Share(BaseMixin, db.Model):
         share.save(commit=commit)
 
         return share
+
+    @classmethod
+    def get_share(cls, user=None, entity=None):
+        if not user or not entity:
+            raise ValueError("User and entity required.")
+
+        return cls.query.filter_by(user_id=user.id) \
+            .filter_by(document_id=entity.id).first()
