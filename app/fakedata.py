@@ -11,9 +11,12 @@ fake = Factory.create()
 def fake_users():
     for user in xrange(1000):
         try:
-            user = User({
-                "username": fake.user_name(),
-                "email": fake.email(),
+            user = User(
+                username=fake.user_name(),
+                email=fake.email(),
+                password="testpass",
+            )
+            user.update_attributes({
                 "first_name": fake.first_name(),
                 "last_name": fake.last_name(),
             })
@@ -24,7 +27,7 @@ def fake_users():
 
 def fake_documents(verbose=False):
     users = User.query.all()
-    for count, user in enumerate(users):
+    for count, user in enumerate(1, users):
         for doc in range(random_int(high=50)):
             user.documents.append(
                 Document({
@@ -40,7 +43,7 @@ def fake_shares(verbose=False):
     users = User.query.all()
     docs = Document.query.all()
     length = len(docs)
-    for count, user in enumerate(users):
+    for count, user in enumerate(1, users):
         for _ in range(random_int(high=10)):
             doc = docs[random_int(high=length-1)]
             if doc not in user.documents.all():

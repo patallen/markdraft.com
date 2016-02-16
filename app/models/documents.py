@@ -92,11 +92,11 @@ class Share(BaseMixin, db.Model):
     @classmethod
     def shares_for_user_query(cls, user_id=None):
         if user_id:
-            return db.session.query(cls).filter(cls.user_id==user_id)
+            return db.session.query(cls).filter_by(user_id=user_id)
         return None
 
     @classmethod
-    def shares_for_user(cls, user=None, user_id=None, read=None, write=None):
+    def shares_for_user(cls, user_id=None, user=None, read=None, write=None):
         if not user_id:
             user_id = user.id
         query = cls.shares_for_user_query(user_id)
@@ -111,6 +111,3 @@ class Share(BaseMixin, db.Model):
             return query.all()
 
         return None
-
-
-        return
