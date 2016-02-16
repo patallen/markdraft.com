@@ -88,3 +88,29 @@ class Share(BaseMixin, db.Model):
 
         return cls.query.filter_by(user_id=user.id) \
             .filter_by(document_id=entity.id).first()
+
+    @classmethod
+    def shares_for_user_query(cls, user_id=None):
+        if user_id:
+            return db.session.query(cls).filter(cls.user_id==user_id)
+        return None
+
+    @classmethod
+    def shares_for_user(cls, user=None, user_id=None, read=None, write=None):
+        if not user_id:
+            user_id = user.id
+        query = cls.shares_for_user_query(user_id)
+
+        if read is not None:
+            query = query.filter_by(read=read)
+
+        if write is not None:
+            query = query.filter_by(write=write)
+
+        if query:
+            return query.all()
+
+        return None
+
+
+        return
