@@ -11,3 +11,4 @@ psycopg2==2.6.1
 ipython==4.0.3
 flask-migrate==1.7.0
 fake-factory==0.5.3
+factory-boy==2.6.1

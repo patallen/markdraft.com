@@ -15,11 +15,6 @@ class User(BaseMixin, db.Model):
     _active = db.Column(db.Boolean, default=True)
     _password = db.Column(db.String(), nullable=False)
 
-    def __init__(self, username, email, password):
-        self.username = username
-        self.email = email
-        self.password = password
-
     @property
     def password(self):
         return self._password

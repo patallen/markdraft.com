@@ -35,7 +35,9 @@ class BaseMixin(object):
 
         return True
 
-    def __init__(self, data=None):
+    def __init__(self, data=None, **kwargs):
+        if data is None:
+            data = kwargs
         if data is not None:
             self.update_attributes(data)
 

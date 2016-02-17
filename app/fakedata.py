@@ -1,49 +1,67 @@
-from models.users import User
-from faker import Factory
+from faker import Factory as FakerFactory
+import factory
+
 from models.documents import Document, Share
-from marklib.helpers import random_int
+from models.users import User
 from models import db
+from marklib.helpers import random_int
 
 
-fake = Factory.create()
+fake = FakerFactory.create()
+
+
+class UserFactory(factory.Factory):
+    class Meta:
+        model = User
+
+    username = factory.LazyAttribute(lambda x: fake.user_name())
+    password = "testpass"
+    email = factory.LazyAttribute(lambda x: fake.email())
+    first_name = factory.LazyAttribute(lambda x: fake.first_name())
+    last_name = factory.LazyAttribute(lambda x: fake.last_name())
+
+
+class DocumentFactory(factory.Factory):
+    class Meta:
+        model = Document
+
+    title = factory.LazyAttribute(
+        lambda x: fake.sentence(nb_words=3, variable_nb_words=True)
+    )
 
 
 def fake_users():
-    for user in xrange(1000):
+    for _ in xrange(1000):
         try:
-            user = User(
-                username=fake.user_name(),
-                email=fake.email(),
-                password="testpass",
-            )
-            user.update_attributes({
-                "first_name": fake.first_name(),
-                "last_name": fake.last_name(),
-            })
+            user = UserFactory()
+            if user.id:
+                print "IDIDIDIDIDID", user.id
             user.save()
-        except:
+        except Exception as e:
+            print e
             pass
 
 
 def fake_documents(verbose=False):
     users = User.query.all()
-    for count, user in enumerate(1, users):
+    for count, user in enumerate(users, 1):
         for doc in range(random_int(high=50)):
-            user.documents.append(
-                Document({
-                    "title": fake.sentence(nb_words=3, variable_nb_words=True)
-                }))
-        user.save()
+            try:
+                user.documents.append(DocumentFactory())
+            except Exception as e:
+                print e
 
         if verbose:
             print "Documents for users %s/%s" % (count, len(users))
+
+    db.session.commit()
 
 
 def fake_shares(verbose=False):
     users = User.query.all()
     docs = Document.query.all()
     length = len(docs)
-    for count, user in enumerate(1, users):
+    for count, user in enumerate(users, 1):
         for _ in range(random_int(high=10)):
             doc = docs[random_int(high=length-1)]
             if doc not in user.documents.all():
