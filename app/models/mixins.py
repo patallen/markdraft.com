@@ -48,3 +48,14 @@ class BaseMixin(object):
 
     def get(self, key, default=None):
         return getattr(self, key) or default
+
+    def to_dict(self, exclude=None):
+        if isinstance(exclude, str):
+            exclude = [exclude]
+
+        columns = self.__table__.columns
+        rv = {}
+        for c in columns:
+            if hasattr(self, c.key) and c.key not in exclude:
+                rv[c.key] = unicode(getattr(self, c.key))
+        return rv
