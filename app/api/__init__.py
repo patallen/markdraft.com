@@ -5,6 +5,4 @@ from api import config
 app = create_flask_app(config)
 
 
-@app.route("/")
-def index():
-    return "Index here."
+from api.views import provider
