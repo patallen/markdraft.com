@@ -26,7 +26,10 @@ class Document(AuditMixin, BaseMixin, db.Model):
 
 class Draft(AuditMixin, BaseMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    document_id = db.Column(db.Integer, db.ForeignKey('document.id'))
+    document_id = db.Column(
+        db.Integer,
+        db.ForeignKey('document.id', ondelete="cascade")
+    )
     version = db.Column(db.Integer, nullable=False)
     title = db.Column(db.String(120))
     body = db.Column(db.String())
@@ -48,10 +51,14 @@ class Share(BaseMixin, db.Model):
     uid = db.Column(GUID(), primary_key=True, default=uuid4)
     document_id = db.Column(
         db.Integer,
-        db.ForeignKey('document.id'),
+        db.ForeignKey('document.id', ondelete="cascade"),
         nullable=False
     )
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey('user.id', ondelete='cascade'),
+        nullable=False
+    )
     read = db.Column(db.Boolean, default=False, nullable=False)
     write = db.Column(db.Boolean, default=False, nullable=False)
     unique = db.UniqueConstraint()
