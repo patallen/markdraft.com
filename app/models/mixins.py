@@ -52,6 +52,8 @@ class BaseMixin(object):
     def to_dict(self, exclude=None):
         if isinstance(exclude, str):
             exclude = [exclude]
+        else:
+            exclude = []
 
         columns = self.__table__.columns
         rv = {}
