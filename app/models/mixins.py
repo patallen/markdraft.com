@@ -61,3 +61,8 @@ class BaseMixin(object):
             if hasattr(self, c.key) and c.key not in exclude:
                 rv[c.key] = unicode(getattr(self, c.key))
         return rv
+
+    def delete(self, commit=True):
+        db.session.delete(self)
+        if commit:
+            db.session.commit()
