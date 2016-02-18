@@ -3,7 +3,7 @@ import json
 
 
 class XHRResponse(Response):
-    default_mime_type = 'application/json'
+    default_mimetype = 'application/json'
 
 
 class MakeResponse(object):
@@ -24,5 +24,15 @@ class MakeResponse(object):
     def set_status(self, code):
         self._response.staus_code = code
 
+    def set_error(self, code=None, error=None):
+        if isinstance(code, int):
+            self.set_status(code)
+        if isinstance(error, str):
+            self.set_body(error)
+
+    def set_content_type(self, content_type):
+        self.set_header('Content-Type', content_type)
+
+    @property
     def response(self):
         return self._response
