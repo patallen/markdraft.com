@@ -27,11 +27,21 @@ def get_document(doc_id):
 
 @app.route("/documents/<int:doc_id>", methods=['PUT'])
 def edit_document(doc_id):
-    print request
     data = request.get_json()
     doc = Document.query.get_or_404(doc_id)
     doc.title = data.get('title')
+    doc.save()
     xhr = MakeResponse(body=doc.to_dict())
+    return xhr.response
+
+
+@app.route("/documents/<int:doc_id>", methods=['DELETE'])
+def delete_document(doc_id):
+    doc = Document.query.get_or_404(doc_id)
+    doc.delete()
+    xhr = MakeResponse()
+    xhr.set_status(200)
+    xhr.set_body({})
     return xhr.response
 
 
