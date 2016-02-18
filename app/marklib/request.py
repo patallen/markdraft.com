@@ -19,7 +19,7 @@ class MakeResponse(object):
 
     def set_body(self, data):
         res = dict(results=data)
-        self._response.set_data(json.dumps(res))
+        self._response.set_data(json.dumps(res, indent=4))
 
     def set_status(self, code):
         self._response.staus_code = code
