@@ -49,17 +49,21 @@ class BaseMixin(object):
     def get(self, key, default=None):
         return getattr(self, key) or default
 
-    def to_dict(self, exclude=None):
-        if isinstance(exclude, str):
+    def to_dict(self, exclude=None, include=None):
+        include = include or []
+        exclude = exclude or []
+        if not isinstance(include, list):
+            include = [include]
+        if not isinstance(exclude, list):
             exclude = [exclude]
-        else:
-            exclude = []
 
-        columns = self.__table__.columns
+        cols = [k.key for k in self.__table__.columns if k.key[0] is not '_']
+        attrs = [c for c in cols if c not in exclude] + include
+
         rv = {}
-        for c in columns:
-            if hasattr(self, c.key) and c.key not in exclude:
-                rv[c.key] = unicode(getattr(self, c.key))
+        for attr in attrs:
+            if hasattr(self, attr):
+                rv[attr] = unicode(getattr(self, attr))
         return rv
 
     def delete(self, commit=True):
