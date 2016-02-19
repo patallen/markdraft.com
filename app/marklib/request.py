@@ -11,6 +11,7 @@ class MakeResponse(object):
 
     def __init__(self, status_code=None, body=None):
         super(MakeResponse, self).__init__()
+        self.response.set_data({})
         if status_code:
             self.set_status(status_code)
         if body:

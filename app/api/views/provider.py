@@ -21,7 +21,7 @@ def create_document():
 @app.route("/documents/<int:doc_id>")
 def get_document(doc_id):
     doc = Document.query.get_or_404(doc_id)
-    xhr = MakeResponse(doc.to_dict(exclude="id"))
+    xhr = MakeResponse(body=doc.to_dict(exclude="id"))
     return xhr.response
 
 
@@ -41,7 +41,6 @@ def delete_document(doc_id):
     doc.delete()
     xhr = MakeResponse()
     xhr.set_status(200)
-    xhr.set_body({})
     return xhr.response
 
 
