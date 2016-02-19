@@ -1,7 +1,6 @@
 from flask import request
 from api import app
 from models.documents import Document
-from models.users import User
 from marklib.request import MakeResponse
 
 
@@ -41,15 +40,6 @@ def delete_document(doc_id):
     doc.delete()
     xhr = MakeResponse()
     xhr.set_status(200)
-    return xhr.response
-
-
-# User's Document GET (ALL)
-@app.route("/users/<int:user_id>/documents")
-def user_documents(user_id):
-    docs = User.query.get(user_id).documents
-    docs = [d.to_dict()for d in docs]
-    xhr = MakeResponse(body=docs)
     return xhr.response
 
 

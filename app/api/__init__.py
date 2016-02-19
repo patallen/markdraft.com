@@ -5,4 +5,4 @@ from api import config
 app = create_flask_app(config)
 
 
-from api.views import provider
+from api.views import documents, users
