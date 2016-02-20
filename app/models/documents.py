@@ -23,6 +23,22 @@ class Document(AuditMixin, BaseMixin, db.Model):
             return getattr(share, permission)
         return False
 
+    @property
+    def latest_draft(self):
+        return self.drafts.order_by(Draft.version).first()
+
+    def get_new_draft(self):
+        latest = self.latest_draft
+        new_version = 1
+        body = None
+        if latest:
+            new_version = latest.version + 1
+            body = latest.body
+        draft = Draft({"version": new_version, "body": body})
+        self.drafts.append(draft)
+        self.save()
+        return draft
+
 
 class Draft(AuditMixin, BaseMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
