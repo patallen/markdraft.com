@@ -25,7 +25,7 @@ class Document(AuditMixin, BaseMixin, db.Model):
 
     @property
     def latest_draft(self):
-        return self.drafts.order_by(Draft.version).first()
+        return self.drafts.order_by(Draft.version.desc()).first()
 
     def get_new_draft(self):
         latest = self.latest_draft
@@ -34,7 +34,8 @@ class Document(AuditMixin, BaseMixin, db.Model):
         if latest:
             new_version = latest.version + 1
             body = latest.body
-        draft = Draft({"version": new_version, "body": body})
+            tit = latest.title
+        draft = Draft({"version": new_version, "body": body, "title": tit})
         self.drafts.append(draft)
         self.save()
         return draft
