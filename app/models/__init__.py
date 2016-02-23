@@ -5,3 +5,4 @@ db = SQLAlchemy(app)
 
 from .users import *
 from .documents import *
+from .tags import *

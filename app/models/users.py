@@ -15,6 +15,8 @@ class User(BaseMixin, db.Model):
     _active = db.Column(db.Boolean, default=True)
     _password = db.Column(db.String(), nullable=False)
 
+    tags = db.relationship('Tag', backref='user', lazy='dynamic')
+
     @property
     def password(self):
         return self._password
