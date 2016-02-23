@@ -1,7 +1,19 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import Layout from "./components/layout";
+import { Router, Route, hashHistory, IndexRoute } from "react-router";
 
-const app = document.getElementById('app');
+import App from "./app";
+import Editor from "./pages/editor";
+import Index from "./pages/index";
+import User from "./pages/user";
+ 
 
-ReactDOM.render(<Layout/>, app);
+ReactDOM.render((
+	<Router history={hashHistory}>
+		<Route path="/" component={App}>
+			<IndexRoute component={Index}/>
+			<Route path="/editor" component={Editor}/>
+			<Route path="/user" component={User}/>
+		</Route>
+	</Router>
+), document.getElementById("app"))
