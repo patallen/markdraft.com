@@ -12,6 +12,16 @@ def get_user_documents(user_id):
     return xhr.response
 
 
+# User's Tag GET (ALL)
+@app.route("/users/<int:user_id>/tags")
+def get_user_tags(user_id):
+    user = User.query.get_or_404(user_id)
+    tags = user.tags
+    tags = [t.to_dict() for t in tags]
+    xhr = MakeResponse(body=tags)
+    return xhr.response
+
+
 # Get Users
 @app.route("/users")
 def get_users():
