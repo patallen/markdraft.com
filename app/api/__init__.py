@@ -7,3 +7,4 @@ app = create_flask_app(config)
 
 from api.views import documents, users
 from api import views
+from api import errors

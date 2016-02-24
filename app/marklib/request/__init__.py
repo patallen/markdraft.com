@@ -9,13 +9,15 @@ class XHRResponse(Response):
 class MakeResponse(object):
     _response = XHRResponse()
 
-    def __init__(self, status_code=None, body=None):
+    def __init__(self, status_code=None, body=None, error=None):
         super(MakeResponse, self).__init__()
         self.response.set_data({})
         if status_code:
             self.set_status(status_code)
         if body:
             self.set_body(body)
+        if error:
+            self.set_error(error=error)
 
     def add_header(self, header, override=True):
         (k, v) = header.items()
@@ -33,10 +35,8 @@ class MakeResponse(object):
         self._response.status_code = code
 
     def set_error(self, code=None, error=None):
-        if isinstance(code, int):
-            self._response.set_status(code)
-        if isinstance(error, str):
-            self._response.set_body(error)
+        res = dict(error=error)
+        self._response.set_data(json.dumps(res, indent=4))
 
     def set_content_type(self, content_type):
         self.set_header('Content-Type', content_type)
