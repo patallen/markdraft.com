@@ -28,6 +28,15 @@ def get_tag(tag_id):
     return xhr.response
 
 
+@app.route("/tags/<int:tag_id")
+def delete_tag(tag_id):
+    tag = Tag.query.get_or_404(tag_id)
+    tag.delete()
+    xhr = MakeResponse()
+    xhr.set_status(200)
+    return xhr.response
+
+
 @app.route("/tags/<int:tag_id>/documents")
 def get_docs_for_tag(tag_id):
     tag = Tag.query.get_or_404(tag_id)
