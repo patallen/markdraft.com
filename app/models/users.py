@@ -7,8 +7,8 @@ from models.mixins import BaseMixin
 
 class User(BaseMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    first_name = db.Column(db.String(), nullable=False)
-    last_name = db.Column(db.String(), nullable=False)
+    first_name = db.Column(db.String())
+    last_name = db.Column(db.String())
     username = db.Column(db.String(), unique=True)
     email = db.Column(db.String(), unique=True)
     _admin = db.Column(db.Boolean, default=False)

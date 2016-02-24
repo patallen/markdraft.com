@@ -1,6 +1,42 @@
+from flask import request
 from api import app
 from models.users import User
 from marklib.request import MakeResponse
+
+
+# REGISTRATION & LOGIN
+@app.route("/auth/register", methods=['POST'])
+def auth_registration():
+    data = request.get_json()
+    print data
+    username = data.get('username')
+    first_name = data.get('first_name')
+    last_name = data.get('last_name')
+    email = data.get('email')
+    pass1 = data.get('password1')
+    pass2 = data.get('password2')
+
+    no_exist = User.query.filter_by(email=email).first() is None
+    pass_equiv = pass1 == pass2
+
+    xhr = MakeResponse()
+
+    if not pass_equiv:
+        xhr.set_error(422, "Paswords to not match.")
+    elif not no_exist:
+        xhr.set_error(409, "Email address is not available for use.")
+    else:
+        user = User({
+            "username": username,
+            "first_name": first_name,
+            "last_name": last_name,
+            "email": email,
+            "password": pass1
+        })
+        user.save()
+        xhr.set_status(200)
+
+    return xhr.response
 
 
 # User's Document GET (ALL)
