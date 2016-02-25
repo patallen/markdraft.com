@@ -1,8 +1,8 @@
 from flask import request
 
 from api import app
-from models.tags import Tag
 from marklib.request import MakeResponse
+from models import Tag
 
 
 @app.route("/tags", methods=['POST'])

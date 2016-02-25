@@ -1,4 +1,5 @@
 from flask_migrate import Migrate, MigrateCommand
+
 from api import app
 from api.factories import create_manager
 from models import db

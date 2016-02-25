@@ -1,7 +1,8 @@
 from flask import request
+
 from api import app
-from models.documents import Document
 from marklib.request import MakeResponse
+from models import Document
 
 
 # Document CREATE

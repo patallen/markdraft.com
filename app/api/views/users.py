@@ -1,7 +1,8 @@
 from flask import request
+
 from api import app
-from models.users import User
 from marklib.request import MakeResponse
+from models import User
 
 
 # REGISTRATION & LOGIN
