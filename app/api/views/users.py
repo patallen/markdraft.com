@@ -2,7 +2,10 @@ from flask import request
 
 from api import app
 from marklib.request import MakeResponse
-from models import User
+from models import User, schemas
+
+
+documents_schema = schemas.DocumentSchema(many=True)
 
 
 # REGISTRATION & LOGIN
@@ -44,8 +47,8 @@ def auth_registration():
 @app.route("/users/<int:user_id>/documents")
 def get_user_documents(user_id):
     docs = User.query.get(user_id).documents
-    docs = [d.to_dict() for d in docs]
-    xhr = MakeResponse(body=docs)
+    docs = documents_schema.dump(docs)
+    xhr = MakeResponse(body=docs.data)
     return xhr.response
 
 

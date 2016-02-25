@@ -32,12 +32,9 @@ def fake_users():
     for _ in xrange(1000):
         try:
             user = UserFactory()
-            if user.id:
-                print "IDIDIDIDIDID", user.id
             user.save()
         except Exception as e:
             print e
-            pass
 
 
 def fake_documents(verbose=False):

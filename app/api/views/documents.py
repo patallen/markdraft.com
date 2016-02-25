@@ -2,7 +2,11 @@ from flask import request
 
 from api import app
 from marklib.request import MakeResponse
-from models import Document
+from models import Document, schemas
+
+drafts_schema = schemas.DraftSchema(many=True)
+document_schema = schemas.DocumentSchema()
+documents_schema = schemas.DocumentSchema(many=True)
 
 
 # Document CREATE
@@ -20,18 +24,19 @@ def create_document():
 # Document GET, PUT, DELETE
 @app.route("/documents/<int:doc_id>")
 def get_document(doc_id):
-    doc = Document.query.get_or_404(doc_id)
-    xhr = MakeResponse(body=doc.to_dict(exclude="id"))
+    doc = document_schema.dump(Document.query.get_or_404(doc_id))
+    xhr = MakeResponse(body=doc.data)
     return xhr.response
 
 
 @app.route("/documents/<int:doc_id>", methods=['PUT'])
 def edit_document(doc_id):
-    data = request.get_json()
+    data = document_schema.load(request.get_json())
     doc = Document.query.get_or_404(doc_id)
-    doc.title = data.get('title')
+    for k, v in data.data.iteritems():
+        setattr(doc, k, v)
     doc.save()
-    xhr = MakeResponse(body=doc.to_dict())
+    xhr = MakeResponse(body=document_schema.dump(doc).data)
     return xhr.response
 
 
@@ -48,6 +53,6 @@ def delete_document(doc_id):
 @app.route("/documents/<int:doc_id>/drafts")
 def get_document_drafts(doc_id):
     drafts = Document.query.get(doc_id).drafts.all()
-    drafts = [d.to_dict() for d in drafts]
-    xhr = MakeResponse(body=drafts)
+    drafts = drafts_schema.dump(drafts)
+    xhr = MakeResponse(body=drafts.data)
     return xhr.response
