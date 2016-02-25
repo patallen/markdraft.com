@@ -12,12 +12,12 @@ documents_schema = schemas.DocumentSchema(many=True)
 # Document CREATE
 @app.route("/documents", methods=['POST'])
 def create_document():
-    data = request.get_json()
-    title = data.get("title")
-    user_id = 3000  # get user from current_user
-    doc = Document({"title": title, "user_id": user_id})
+    data = document_schema.load(request.get_json()).data
+    user_id = 2  # get user from current_user
+    doc = Document(data)
+    doc.user_id = user_id
     doc.save()
-    xhr = MakeResponse(201, doc.to_dict())
+    xhr = MakeResponse(201, document_schema.dump(doc).data)
     return xhr.response
 
 

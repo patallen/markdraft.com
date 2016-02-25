@@ -2,20 +2,21 @@ from flask import request
 
 from api import app
 from marklib.request import MakeResponse
-from models import Tag
+from models import Tag, schemas
+
+from api.views.documents import documents_schema
+
+
+tag_schema = schemas.TagSchema()
+tags_schema = schemas.TagSchema(many=True)
 
 
 @app.route("/tags", methods=['POST'])
 def create_tag():
-    data = request.get_json()
-    title = data.get("title")
-    description = data.get("description")
-    user_id = 3000  # get user from current_user
-    tag = Tag({
-        "title": title,
-        "description": description,
-        "user_id": user_id
-    })
+    data = tag_schema.load(request.get_json()).data
+    user_id = 2  # get user from current_user
+    tag = Tag(data)
+    tag.user_id = user_id
     tag.save()
     xhr = MakeResponse(201, tag.to_dict())
     return xhr.response
@@ -24,22 +25,22 @@ def create_tag():
 @app.route("/tags/<int:tag_id>")
 def get_tag(tag_id):
     tag = Tag.query.get_or_404(tag_id)
-    xhr = MakeResponse(body=tag.to_dict())
+    tag = tag_schema.dump(tag).data
+    xhr = MakeResponse(body=tag)
     return xhr.response
 
 
-@app.route("/tags/<int:tag_id")
+@app.route("/tags/<int:tag_id>")
 def delete_tag(tag_id):
     tag = Tag.query.get_or_404(tag_id)
     tag.delete()
     xhr = MakeResponse()
-    xhr.set_status(200)
     return xhr.response
 
 
 @app.route("/tags/<int:tag_id>/documents")
 def get_docs_for_tag(tag_id):
     tag = Tag.query.get_or_404(tag_id)
-    docs = [d.to_dict() for d in tag.documents]
+    docs = documents_schema.dump(tag.documents).data
     xhr = MakeResponse(body=docs)
     return xhr.response
