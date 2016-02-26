@@ -1,5 +1,9 @@
+from datetime import datetime
+
 from itsdangerous import JSONWebSignatureSerializer
 from flask import current_app as app
+
+from marklib.formats import dates
 
 EXPIRE_TIME = app.config.get('JWT_EXPIRE_TIME')
 SECRET_KEY = app.config.get('JWT_SECRET_KEY')
@@ -7,21 +11,9 @@ SECRET_KEY = app.config.get('JWT_SECRET_KEY')
 
 jwt = JSONWebSignatureSerializer(SECRET_KEY)
 
-import time
-import math
-from datetime import datetime
-
-
-def timestamp(dt):
-    stamp = time.mktime((
-        dt.year, dt.month, dt.day, dt.hour,
-        dt.minute, dt.second, -1, -1, -1)
-    ) + dt.microsecond / 1e6
-    return int(math.floor(stamp))
-
 
 def generate_claims(claims=None):
-    now = timestamp(datetime.now())
+    now = dates.timestamp(datetime.now())
     exp = now + EXPIRE_TIME
     rv = {"iat": now, "exp": exp}
     for k, v in claims.iteritems():
