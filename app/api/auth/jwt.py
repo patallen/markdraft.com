@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from itsdangerous import JSONWebSignatureSerializer
+from itsdangerous import JSONWebSignatureSerializer, BadSignature
 from flask import current_app as app
 
 from marklib.formats import dates
@@ -31,3 +31,17 @@ def create_token_for_user(user):
     )
     headers = {"typ": "JWT"}
     return jwt.dumps(generate_claims(user), header_fields=headers)
+
+
+def verify_token(token):
+    try:
+        payload = jwt.loads(token)
+    except BadSignature:
+        print "Bad Signature"
+        return False
+
+    now = dates.timestamp(datetime.now())
+    exp = payload.get('exp', 0)
+    if int(now) > int(exp):
+        return False
+    return True
