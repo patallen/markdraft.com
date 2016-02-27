@@ -3,6 +3,8 @@ from flask import request
 from api import app
 from marklib.request import MakeResponse
 from models import User, schemas
+with app.app_context():
+    from api.auth import jwt
 
 
 documents_schema = schemas.DocumentSchema(many=True)
@@ -41,6 +43,24 @@ def auth_registration():
         xhr.set_status(200)
 
     return xhr.response
+
+
+@app.route("/auth/login", methods=['post'])
+def auth_login():
+    data = request.get_json()
+    username = data.get('username')
+    password = data.get('password')
+    user = User.query.filter_by(username=username).first()
+    xhr = MakeResponse()
+    if user and user.authenticate(password):
+        token = jwt.create_token_for_user(user)
+        res = dict(access_token=token)
+        xhr.set_body(res)
+        return xhr.response
+
+    else:
+        xhr.set_error(401, {"error": "Trouble authenticating"})
+        return xhr.response
 
 
 # User's Document GET (ALL)
