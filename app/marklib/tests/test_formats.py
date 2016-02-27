@@ -2,12 +2,13 @@ import unittest
 from datetime import datetime
 
 from marklib.formats import dates
+from datetime import date
 
 
 class TestTimestampTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.dt = datetime(1990, 2, 25, 0, 1, 0, 0)
+        self.dt = datetime(1990, 2, 25)
 
     def test_timestamp_type(self):
         ts = dates.timestamp(self.dt)
@@ -15,5 +16,11 @@ class TestTimestampTestCase(unittest.TestCase):
 
     def test_timestamp_values(self):
         ts = dates.timestamp(self.dt)
+        d = date.fromtimestamp(ts)
+
+        self.assertEqual(d, self.dt)
         self.assertGreater(ts, 0)
-        self.assertEqual(ts, 635922060)
+        self.assertEqual(ts, 635904000)
+
+if __name__ == '__main__':
+    unittest.main()

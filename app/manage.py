@@ -34,6 +34,5 @@ def fake_all(verbose=True):
     fake_documents(verbose=verbose)
     fake_shares(verbose=verbose)
 
-
 if __name__ == "__main__":
     manager.run()
