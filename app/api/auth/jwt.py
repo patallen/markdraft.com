@@ -1,12 +1,18 @@
 from datetime import datetime
 
+from flask import request, Response, g
 from itsdangerous import JSONWebSignatureSerializer, BadSignature
-from flask import current_app as app
 
+from api import app
 from marklib.formats import dates
+from models import User
+
 
 EXPIRE_TIME = app.config.get('JWT_EXPIRE_TIME')
 SECRET_KEY = app.config.get('JWT_SECRET_KEY')
+
+if app.config.get('JWT_TOKEN_PREFIX') is not None:
+    JWT_PREFIX = "%s " % app.config.get('JWT_TOKEN_PREFIX')
 
 
 jwt = JSONWebSignatureSerializer(SECRET_KEY)
@@ -44,4 +50,25 @@ def verify_token(token):
     exp = payload.get('exp', 0)
     if int(now) > int(exp):
         return False
-    return True
+    return payload
+
+
+def require_jwt(f):
+    def wrapper(*args, **kwargs):
+        auth_header = request.headers.get('Authorization', None)
+
+        if auth_header.startswith(JWT_PREFIX):
+            token = auth_header[len(JWT_PREFIX):]
+
+        if token is None:
+            return Response("Authorization Required"), 401
+
+        payload = verify_token(token)
+        if not payload:
+            return Response("Could not authorize."), 401
+
+        user_id = payload.get('user_id')
+        g.current_user = User.query.get(user_id)
+        return f(*args, **kwargs)
+    return wrapper
+

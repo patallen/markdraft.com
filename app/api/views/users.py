@@ -1,10 +1,9 @@
 from flask import request
 
 from api import app
+from api.auth import jwt
 from marklib.request import MakeResponse
 from models import User, schemas
-with app.app_context():
-    from api.auth import jwt
 
 
 documents_schema = schemas.DocumentSchema(many=True)
@@ -14,7 +13,6 @@ documents_schema = schemas.DocumentSchema(many=True)
 @app.route("/auth/register", methods=['POST'])
 def auth_registration():
     data = request.get_json()
-    print data
     username = data.get('username')
     first_name = data.get('first_name')
     last_name = data.get('last_name')
@@ -74,6 +72,7 @@ def get_user_documents(user_id):
 
 # User's Tag GET (ALL)
 @app.route("/users/<int:user_id>/tags")
+@jwt.require_jwt
 def get_user_tags(user_id):
     user = User.query.get_or_404(user_id)
     tags = user.tags

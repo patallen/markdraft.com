@@ -2,6 +2,8 @@ APP_NAME = 'markdraft'
 
 JWT_SECRET_KEY = "dlkjfkasdklfjdaslkfjdak9"
 JWT_EXPIRE_TIME = 3600
+JWT_TOKEN_PREFIX = "Bearer"
+
 SECRET_KEY = "kdjsf93uef09ifewdjasj0923"
 DEBUG = True
 TESTING = True
