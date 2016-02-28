@@ -57,6 +57,10 @@ def require_jwt(f):
     def wrapper(*args, **kwargs):
         auth_header = request.headers.get('Authorization', None)
 
+        if auth_header is None:
+            return Response("Authorization Required"), 401
+
+        token = None
         if auth_header.startswith(JWT_PREFIX):
             token = auth_header[len(JWT_PREFIX):]
 
