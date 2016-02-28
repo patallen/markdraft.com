@@ -20,9 +20,9 @@ class MakeResponse(object):
             self.set_error(error=error)
 
     def add_header(self, header, override=True):
-        (k, v) = header.items()
-        if self._response.headers.get(k) is None or override:
-            self.set_header(k, v)
+        for k, v in header.items():
+            if self._response.headers.get(k) is None or override:
+                self.set_header(k, v)
 
     def set_header(self, header, value):
         self._response.headers[header] = value
