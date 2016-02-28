@@ -71,4 +71,3 @@ def require_jwt(f):
         g.current_user = User.query.get(user_id)
         return f(*args, **kwargs)
     return wrapper
-
