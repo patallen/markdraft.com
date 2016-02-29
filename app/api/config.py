@@ -1,13 +1,25 @@
-APP_NAME = 'markdraft'
 
-JWT_SECRET_KEY = "dlkjfkasdklfjdaslkfjdak9"
-JWT_EXPIRE_TIME = 3600
-JWT_TOKEN_PREFIX = "Bearer"
 
-SECRET_KEY = "kdjsf93uef09ifewdjasj0923"
-DEBUG = True
-TESTING = True
-LOG_LEVEL = 'DEBUG'
-db_uri = "postgresql://markdraft:markdraft@postgres/{0}"
-SQLALCHEMY_DATABASE_URI = db_uri.format(APP_NAME)
-SQLALCHEMY_POOL_SIZE = 5
+class Config(object):
+    APP_NAME = 'markdraft'
+    JWT_SECRET_KEY = "change-this-in-production"
+    JWT_EXPIRE_TIME = 3600
+    JWT_TOKEN_PREFIX = "Bearer"
+
+    SECRET_KEY = "change-this-in-production"
+    LOG_LEVEL = 'DEBUG'
+    SQLALCHEMY_POOL_SIZE = 5
+
+
+class Development(Config):
+    DEBUG = True
+    APP_NAME = 'markdraft'
+    db_uri = "postgresql://markdraft:markdraft@postgres/{0}"
+    SQLALCHEMY_DATABASE_URI = db_uri.format(APP_NAME)
+
+
+class Testing(Config):
+    TESTING = True
+    APP_NAME = 'markdraft_test'
+    db_uri = "postgresql://markdraft:markdraft@postgres/{0}"
+    SQLALCHEMY_DATABASE_URI = db_uri.format(APP_NAME)
