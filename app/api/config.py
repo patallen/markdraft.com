@@ -1,7 +1,6 @@
 
 
 class Config(object):
-    APP_NAME = 'markdraft'
     JWT_SECRET_KEY = "change-this-in-production"
     JWT_EXPIRE_TIME = 3600
     JWT_TOKEN_PREFIX = "Bearer"
@@ -19,6 +18,7 @@ class Development(Config):
 
 
 class Testing(Config):
+    DEBUG = True
     TESTING = True
     APP_NAME = 'markdraft_test'
     db_uri = "postgresql://markdraft:markdraft@postgres/{0}"

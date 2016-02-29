@@ -1,42 +1,29 @@
-import unittest
 from mock import Mock
 
-from models import User
-from api.auth import jwt
 from api import app
+from api.auth import jwt
+from tests import BaseTestCase
 
 
-class TestJWTTestCase(unittest.TestCase):
-    def setUp(self):
-        user = User.query.filter_by(username="testuser").first()
-        if user is None:
-            self.user = User(
-                username="testuser",
-                password="test",
-                email="test@user.com",
-            )
-            self.user.save()
-        else:
-            self.user = user
-
+class TestJWTTestCase(BaseTestCase):
     def test_generate_claims(self):
         claims = jwt.generate_claims(dict(
-            username=self.user.username,
-            user_id=self.user.id,
+            username=self.default_user.username,
+            user_id=self.default_user.id,
         ))
         self.assertIsNotNone(claims.get('iat'))
         self.assertIsNotNone(claims.get('exp'))
-        self.assertEqual(claims.get('username'), self.user.username)
+        self.assertEqual(claims.get('username'), self.default_user.username)
 
     def test_create_token_for_user(self):
-        token = jwt.create_token_for_user(self.user)
+        token = jwt.create_token_for_user(self.default_user)
         self.assertGreater(len(token), 20)
 
     def test_verify_token(self):
-        good_token = jwt.create_token_for_user(self.user)
+        good_token = jwt.create_token_for_user(self.default_user)
         payload = jwt.verify_token(good_token)
         self.assertTrue(payload)
-        self.assertEqual(payload.get('first_name'), 'testuser')
+        self.assertEqual(payload.get('first_name'), 'Test')
         self.assertFalse(jwt.verify_token("kdsjfldkfjkdajlf"))
 
         bad_token = jwt.jwt.dumps({"exp": 0})
@@ -52,7 +39,7 @@ class TestJWTTestCase(unittest.TestCase):
         nobearer_header = {
             "Authorization": "this-is-not-a-token"
         }
-        token = jwt.create_token_for_user(self.user)
+        token = jwt.create_token_for_user(self.default_user)
         good_header = {
             "Authorization": "Bearer %s" % token
         }

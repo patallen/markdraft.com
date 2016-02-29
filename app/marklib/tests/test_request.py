@@ -1,9 +1,8 @@
-import unittest
-
 from marklib import request
+from tests import BaseTestCase
 
 
-class MakeResponseTestCase(unittest.TestCase):
+class MakeResponseTestCase(BaseTestCase):
     def test_makeresponse_init(self):
         xhr = request.MakeResponse(404, error="ERROR")
         self.assertEqual(xhr.response.status_code, 404)
