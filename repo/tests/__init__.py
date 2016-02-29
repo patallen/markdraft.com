@@ -1,12 +1,12 @@
 import unittest
 
-from api import config, factories
-from models import db, User
+from models import User, db
+from api import config, app
 
 
 class BaseTestCase(unittest.TestCase):
     def setUp(self):
-        self.app = factories.create_flask_app(config.Testing).test_client()
+        app.config.from_object(config.Testing)
         db.create_all()
         user = User(
             username="testuser",
@@ -16,6 +16,7 @@ class BaseTestCase(unittest.TestCase):
         )
         user.save()
         self.default_user = user
+        print db
 
     def tearDown(self):
         db.session.remove()

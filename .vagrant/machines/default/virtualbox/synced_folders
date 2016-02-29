@@ -1,0 +1,1 @@
+{"virtualbox":{"vagrant-root":{"id":"vagrant-root","owner":"vagrant","group":"vagrant","mount_options":["dmode=775","fmode=774"],"guestpath":"/var/api","hostpath":"/Users/patallen/Code/Sites/markdraft/repo","disabled":false},"/vagrant":{"guestpath":"/vagrant","hostpath":"/Users/patallen/Code/Sites/markdraft","disabled":false}}}
