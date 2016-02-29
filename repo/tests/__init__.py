@@ -16,7 +16,6 @@ class BaseTestCase(unittest.TestCase):
         )
         user.save()
         self.default_user = user
-        print db
 
     def tearDown(self):
         db.session.remove()

@@ -110,3 +110,9 @@ def setup_server():
     setup_nginx()
     setup_db()
     db("upgrade")
+
+
+@hosts(connection)
+def test():
+    with cd(root):
+        run("%s/bin/python -m unittest discover" % (virtualenv,))
