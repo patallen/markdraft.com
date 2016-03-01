@@ -20,3 +20,8 @@ class BaseTestCase(unittest.TestCase):
     def tearDown(self):
         db.session.remove()
         db.drop_all()
+
+    def assertAllIn(self, theirs, ours):
+        for val in ours:
+            if val not in theirs:
+                raise AssertionError("Expected %s in list." % (val,))
