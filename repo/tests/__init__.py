@@ -1,6 +1,6 @@
 import unittest
 
-from models import User, db
+from models import Document, User, db
 from api import config, app
 
 
@@ -17,6 +17,12 @@ class BaseTestCase(unittest.TestCase):
         )
         user.save()
         self.default_user = user
+        document = Document(
+            title="This is a Test Title",
+            user_id=self.default_user.id
+        )
+        document.save()
+        self.default_document = document
 
     def tearDown(self):
         db.session.remove()

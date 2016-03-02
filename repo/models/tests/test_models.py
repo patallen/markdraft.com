@@ -4,26 +4,18 @@ from models import Document, db
 
 
 class BaseMixinTestCase(BaseTestCase):
-    def setUp(self):
-        super(BaseMixinTestCase, self).setUp()
-        doc = Document(
-            title="This is a Test Title",
-            user=self.default_user
-        )
-        doc.save()
-        self.doc = doc
 
     def test_update_attributes(self):
-        self.doc.update_attributes({"title": "BOOM"})
-        self.doc.save()
-        self.assertEqual(self.doc.title, "BOOM")
+        self.default_document.update_attributes({"title": "BOOM"})
+        self.default_document.save()
+        self.assertEqual(self.default_document.title, "BOOM")
 
     def test_get(self):
         title = "This is a Test Title"
-        self.assertEqual(self.doc.get('title'), title)
+        self.assertEqual(self.default_document.get('title'), title)
 
     def test_to_dict(self):
-        dic = self.doc.to_dict()
+        dic = self.default_document.to_dict()
         self.assertAllIn(
             dic.keys(),
             ["title", "created_at",
@@ -31,7 +23,7 @@ class BaseMixinTestCase(BaseTestCase):
         )
 
     def test_to_dict_exclude(self):
-        dic = self.doc.to_dict(exclude="id")
+        dic = self.default_document.to_dict(exclude="id")
         self.assertTrue("id" not in dic.keys())
 
     def test_to_dict_include(self):
@@ -39,5 +31,5 @@ class BaseMixinTestCase(BaseTestCase):
         self.assertTrue("_password" in dic.keys())
 
     def test_delete(self):
-        self.doc.delete()
+        self.default_document.delete()
         self.assertIsNone(Document.query.first())
