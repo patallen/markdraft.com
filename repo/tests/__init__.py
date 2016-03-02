@@ -32,6 +32,7 @@ class BaseTestCase(unittest.TestCase):
         for val in ours:
             if val not in theirs:
                 raise AssertionError("Expected %s in list." % (val,))
+        return True
 
     def assertStatus(self, response, expected):
         if response.status_code != expected:
