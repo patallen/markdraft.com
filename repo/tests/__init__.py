@@ -36,3 +36,26 @@ class BaseTestCase(unittest.TestCase):
 
     def assertStatus200(self, response):
         self.assertStatus(response, 200)
+
+    def assertNotAllowed(self, endpoint, disallowed=None, allowed=None):
+        methods = ["POST", "PUT", "GET", "PATCH", "DELETE"]
+        if allowed:
+            disallowed = [m for m in methods if m not in allowed]
+
+        for action in disallowed:
+            if action == "POST":
+                res = self.app.post(endpoint)
+            if action == "PUT":
+                res = self.app.put(endpoint)
+            if action == "DELETE":
+                res = self.app.delete(endpoint)
+            if action == "GET":
+                res = self.app.get(endpoint)
+            if action == "PATCH":
+                res = self.app.patch(endpoint)
+
+            if res.status_code != 405:
+                raise AssertionError(
+                    "Expected 405 status code for %s action. Got %s."
+                    % (action, res.status_code)
+                )
