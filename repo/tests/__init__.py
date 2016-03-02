@@ -39,23 +39,22 @@ class BaseTestCase(unittest.TestCase):
 
     def assertNotAllowed(self, endpoint, disallowed=None, allowed=None):
         methods = ["POST", "PUT", "GET", "PATCH", "DELETE"]
-        if allowed:
+
+        if allowed is not None:
             disallowed = [m for m in methods if m not in allowed]
 
         for action in disallowed:
-            if action == "POST":
-                res = self.app.post(endpoint)
-            if action == "PUT":
-                res = self.app.put(endpoint)
-            if action == "DELETE":
-                res = self.app.delete(endpoint)
-            if action == "GET":
-                res = self.app.get(endpoint)
-            if action == "PATCH":
-                res = self.app.patch(endpoint)
+            res = self.action(endpoint, action)
+
+            if action.upper() not in methods:
+                raise ValueError("%s is not an accepted method." % action)
 
             if res.status_code != 405:
                 raise AssertionError(
                     "Expected 405 status code for %s action. Got %s."
                     % (action, res.status_code)
                 )
+
+    def action(self, endpoint, method, **kwargs):
+        kwargs['method'] = method.upper()
+        return self.app.open(endpoint, **kwargs)
