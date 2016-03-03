@@ -15,7 +15,6 @@ class UsersTestCase(BaseTestCase):
             "first_name": "testy_user",
             "last_name": "McUser"
         }
-        self.json_type = [('Content-Type', 'application/json')]
 
     def test_users_get(self):
         res = self.app.get('/users')
@@ -35,7 +34,7 @@ class UsersTestCase(BaseTestCase):
         res = self.app.post(
             '/auth/register',
             data=json.dumps(self.user_dict),
-            headers=self.json_type
+            headers=self.headers
         )
         self.assertStatus200(res)
         self.assertIsNotNone(User.query.filter_by(username="testing").first())
@@ -45,7 +44,7 @@ class UsersTestCase(BaseTestCase):
         res = self.app.post(
             '/auth/register',
             data=json.dumps(self.user_dict),
-            headers=self.json_type
+            headers=self.headers
         )
         self.assertStatus(res, 422)
         self.assertTrue("do not match" in res.data)
@@ -54,7 +53,7 @@ class UsersTestCase(BaseTestCase):
         self.user_dict['email'] = self.default_user.email
         res = self.app.post(
             '/auth/register',
-            data=json.dumps(self.user_dict), headers=self.json_type
+            data=json.dumps(self.user_dict), headers=self.headers
         )
         self.assertStatus(res, 409)
         self.assertTrue("not available" in res.data)
@@ -64,7 +63,7 @@ class UsersTestCase(BaseTestCase):
             "username": "testuser",
             "password": "123abc"
         })
-        res = self.app.post('/auth/login', data=req, headers=self.json_type)
+        res = self.app.post('/auth/login', data=req, headers=self.headers)
         self.assertStatus200(res)
         results = json.loads(res.data).get('results')
         self.assertAllIn(results.keys(), ['access_token'])
@@ -77,7 +76,14 @@ class UsersTestCase(BaseTestCase):
         res = self.app.post(
             '/auth/login',
             data=req,
-            headers=self.json_type
+            headers=self.headers
         )
         self.assertStatus(res, 401)
         self.assertTrue('Trouble authenticating' in res.data)
+
+    def test_get_user_tags(self):
+        get = self.app.get('/users/1/tags', headers=self.headers)
+        self.assertStatus(get, 200)
+        results = json.loads(get.data).get('results')
+        self.assertEqual(len(results), 1)
+        self.assertNotAllowed("/users/1/tags", allowed=['GET'])
