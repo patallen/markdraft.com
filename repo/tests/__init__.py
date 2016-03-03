@@ -1,7 +1,8 @@
 import unittest
 
-from models import Document, User, db
+from models import Document, Tag, User, db
 from api import config, app
+from api.auth import jwt
 
 
 class BaseTestCase(unittest.TestCase):
@@ -9,12 +10,14 @@ class BaseTestCase(unittest.TestCase):
         app.config.from_object(config.Testing)
         self.app = app.test_client()
         db.create_all()
+        tag = Tag(title="TAGGY")
         user = User(
             username="testuser",
             password="123abc",
             first_name="Test",
             last_name="User"
         )
+        user.tags.append(tag)
         user.save()
         self.default_user = user
         document = Document(
@@ -23,6 +26,12 @@ class BaseTestCase(unittest.TestCase):
         )
         document.save()
         self.default_document = document
+
+        token = jwt.create_token_for_user(self.default_user)
+        self.headers = [
+            ('Content-Type', 'application/json'),
+            ('Authorization', 'Bearer %s' % token)
+        ]
 
     def tearDown(self):
         db.session.remove()
