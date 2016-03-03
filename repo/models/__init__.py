@@ -38,6 +38,7 @@ class Document(AuditMixin, BaseMixin, db.Model):
         latest = self.latest_draft
         new_version = 1
         body = None
+        tit = None
         if latest:
             new_version = latest.version + 1
             body = latest.body

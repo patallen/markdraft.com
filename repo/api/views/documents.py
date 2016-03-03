@@ -27,7 +27,7 @@ def create_document():
 @app.route("/documents/<int:doc_id>")
 def get_document(doc_id):
     doc = document_schema.dump(Document.query.get_or_404(doc_id))
-    xhr = MakeResponse(body=doc.data)
+    xhr = MakeResponse(200, body=doc.data)
     return xhr.response
 
 
@@ -38,7 +38,7 @@ def edit_document(doc_id):
     for k, v in data.data.iteritems():
         setattr(doc, k, v)
     doc.save()
-    xhr = MakeResponse(body=document_schema.dump(doc).data)
+    xhr = MakeResponse(200, body=document_schema.dump(doc).data)
     return xhr.response
 
 

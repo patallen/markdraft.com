@@ -99,3 +99,23 @@ class DocumentsViewsTestCase(BaseTestCase):
 
         self.assertStatus(res, 201)
         self.assertIsNotNone(Document.query.filter_by(title="TEST DOC").all())
+
+    def test_get_document(self):
+        res = self.app.get('/documents/1')
+        results = json.loads(res.data).get('results')
+        self.assertStatus200(res)
+        self.assertAllIn(results, ['created_at', 'title', 'updated_at', 'id'])
+        self.assertEqual(results['title'], "This is a Test Title")
+
+    def test_edit_document(self):
+        req = json.dumps({"title": "this is a new title"})
+        res = self.app.put('/documents/1', data=req, headers=self.headers)
+        self.assertStatus200(res)
+        doc = Document.query.get(1)
+        self.assertEqual(doc.title, "this is a new title")
+
+    def test_delete_document(self):
+        res = self.app.delete('/documents/1', headers=self.headers)
+        self.assertStatus200(res)
+        doc = Document.query.get(1)
+        self.assertIsNone(doc)
