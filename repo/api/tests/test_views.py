@@ -5,6 +5,18 @@ from tests import BaseTestCase
 
 
 class UsersTestCase(BaseTestCase):
+    def setUp(self):
+        super(UsersTestCase, self).setUp()
+        self.user_dict = {
+            "email": "testacct@testing.com",
+            "username": "testing",
+            "password1": "testtest",
+            "password2": "testtest",
+            "first_name": "testy_user",
+            "last_name": "McUser"
+        }
+        self.json_type = [('Content-Type', 'application/json')]
+
     def test_users_get(self):
         res = self.app.get('/users')
         self.assertStatus200(res)
@@ -20,32 +32,52 @@ class UsersTestCase(BaseTestCase):
         self.assertNotAllowed("/users/1/documents", allowed=['GET'])
 
     def test_auth_registration(self):
-        req = {
-            "email": "testacct@testing.com",
-            "username": "testing",
-            "password1": "testtest",
-            "password2": "testtest",
-            "first_name": "testy_user",
-            "last_name": "McUser"
-        }
         res = self.app.post(
             '/auth/register',
-            data=json.dumps(req),
-            headers=[('Content-Type', 'application/json')]
+            data=json.dumps(self.user_dict),
+            headers=self.json_type
         )
         self.assertStatus200(res)
         self.assertIsNotNone(User.query.filter_by(username="testing").first())
 
-    def test_auth_login(self):
+    def test_auth_nonmatching_pw_registration(self):
+        self.user_dict['password2'] = "nomatch"
+        res = self.app.post(
+            '/auth/register',
+            data=json.dumps(self.user_dict),
+            headers=self.json_type
+        )
+        self.assertStatus(res, 422)
+        self.assertTrue("do not match" in res.data)
+
+    def test_auth_email_taken_registration(self):
+        self.user_dict['email'] = self.default_user.email
+        res = self.app.post(
+            '/auth/register',
+            data=json.dumps(self.user_dict), headers=self.json_type
+        )
+        self.assertStatus(res, 409)
+        self.assertTrue("not available" in res.data)
+
+    def test_auth_correct_login(self):
         req = json.dumps({
             "username": "testuser",
             "password": "123abc"
         })
-        res = self.app.post(
-            '/auth/login',
-            data=req,
-            headers=[('Content-Type', 'application/json')]
-        )
+        res = self.app.post('/auth/login', data=req, headers=self.json_type)
         self.assertStatus200(res)
         results = json.loads(res.data).get('results')
         self.assertAllIn(results.keys(), ['access_token'])
+
+    def test_auth_incorrect_login(self):
+        req = json.dumps({
+            "username": "testuser",
+            "password": "wrongpassword"
+        })
+        res = self.app.post(
+            '/auth/login',
+            data=req,
+            headers=self.json_type
+        )
+        self.assertStatus(res, 401)
+        self.assertTrue('Trouble authenticating' in res.data)

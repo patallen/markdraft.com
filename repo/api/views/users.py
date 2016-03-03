@@ -26,7 +26,7 @@ def auth_registration():
     xhr = MakeResponse()
 
     if not pass_equiv:
-        xhr.set_error(422, "Paswords to not match.")
+        xhr.set_error(422, "Paswords do not match.")
     elif not no_exist:
         xhr.set_error(409, "Email address is not available for use.")
     else:

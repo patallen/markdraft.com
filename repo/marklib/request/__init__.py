@@ -36,6 +36,8 @@ class MakeResponse(object):
 
     def set_error(self, code=None, error=None):
         res = dict(error=error)
+        if code:
+            self.set_status(code)
         self._response.set_data(json.dumps(res, indent=4))
 
     def set_content_type(self, content_type):
