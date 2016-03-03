@@ -1,12 +1,12 @@
 import json
 
-from models import User
+from models import User, Document
 from tests import BaseTestCase
 
 
-class UsersTestCase(BaseTestCase):
+class UsersViewsTestCase(BaseTestCase):
     def setUp(self):
-        super(UsersTestCase, self).setUp()
+        super(UsersViewsTestCase, self).setUp()
         self.user_dict = {
             "email": "testacct@testing.com",
             "username": "testing",
@@ -87,3 +87,15 @@ class UsersTestCase(BaseTestCase):
         results = json.loads(get.data).get('results')
         self.assertEqual(len(results), 1)
         self.assertNotAllowed("/users/1/tags", allowed=['GET'])
+
+
+class DocumentsViewsTestCase(BaseTestCase):
+    def test_create_document(self):
+        self.assertNotAllowed("/documents", allowed=['POST'])
+        req = json.dumps({
+            "title": "TEST DOC",
+        })
+        res = self.app.post("/documents", data=req, headers=self.headers)
+
+        self.assertStatus(res, 201)
+        self.assertIsNotNone(Document.query.filter_by(title="TEST DOC").all())

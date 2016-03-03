@@ -1,6 +1,7 @@
-from flask import request
+from flask import request, g
 
 from api import app
+from api.auth import jwt
 from marklib.request import MakeResponse
 from models import Document, schemas
 
@@ -11,11 +12,12 @@ documents_schema = schemas.DocumentSchema(many=True)
 
 # Document CREATE
 @app.route("/documents", methods=['POST'])
+@jwt.require_jwt
 def create_document():
+    user = g.current_user
     data = document_schema.load(request.get_json()).data
-    user_id = 2  # get user from current_user
     doc = Document(data)
-    doc.user_id = user_id
+    doc.user_id = user.id
     doc.save()
     xhr = MakeResponse(201, document_schema.dump(doc).data)
     return xhr.response

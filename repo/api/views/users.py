@@ -49,7 +49,7 @@ def auth_login():
     username = data.get('username')
     password = data.get('password')
     user = User.query.filter_by(username=username).first()
-    xhr = MakeResponse()
+    xhr = MakeResponse(200)
     if user and user.authenticate(password):
         token = jwt.create_token_for_user(user)
         res = dict(access_token=token)

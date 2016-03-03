@@ -32,6 +32,7 @@ class TestJWTTestCase(BaseTestCase):
 
     def test_require_jwt_decorator(self):
         mock = Mock(return_value="success")
+        mock.__name__ = 'test_mock'
         mock_fn = jwt.require_jwt(mock)
         bad_header = {
             "Authorization": "Bearer this-is-not-a-token"

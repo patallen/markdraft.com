@@ -4,6 +4,7 @@ from flask import request, Response, g
 from itsdangerous import JSONWebSignatureSerializer, BadSignature
 
 from api import app
+import functools as func
 from marklib.formats import dates
 from models import User
 
@@ -54,6 +55,7 @@ def verify_token(token):
 
 
 def require_jwt(f):
+    @func.wraps(f)
     def wrapper(*args, **kwargs):
         auth_header = request.headers.get('Authorization', None)
 
