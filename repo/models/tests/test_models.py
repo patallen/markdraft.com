@@ -74,3 +74,34 @@ class DocumentModelTestCase(BaseTestCase):
             self.default_document.user_has_access(self.user2, 'write'))
         self.assertFalse(
             self.random_doc.user_has_access(self.user2, 'read'))
+
+
+class UserModelTestCase(BaseTestCase):
+    def test_password(self):
+        first_pass = self.default_user.password
+        self.assertIsNotNone(first_pass)
+        self.assertNotEqual(first_pass, "123abc")
+        self.default_user.password = "iLoVeCaNdy"
+        self.assertNotEqual(first_pass, self.default_user.password)
+
+    def test_authenticate(self):
+        self.assertTrue(
+            self.default_user.authenticate("123abc")
+        )
+        self.assertFalse(
+            self.default_user.authenticate("NOTITNOTIT")
+        )
+
+    def test_active_and_admin(self):
+        self.assertTrue(self.default_user.is_active)
+        self.assertFalse(self.default_user.is_admin)
+        self.default_user.update_attributes({"_admin": True})
+        self.assertTrue(self.default_user.is_admin)
+
+    def test_owns_document(self):
+        doc = Document.query.first()
+        self.assertTrue(self.default_user.owns_document(doc))
+        new_doc = Document({"title": "random document"})
+        new_doc.save()
+        self.assertFalse(self.default_user.owns_document(new_doc))
+
