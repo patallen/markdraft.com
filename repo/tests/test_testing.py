@@ -29,3 +29,9 @@ class TestingTestCase(BaseTestCase):
             self.assertStatus(response, 400)
         with self.assertRaises(AssertionError):
             self.assertStatus200(response)
+
+    def test_assertNotAllowed(self):
+        with self.assertRaises(AssertionError):
+            self.assertNotAllowed('/documents', allowed=['PUT'])
+        with self.assertRaises(ValueError):
+            self.assertNotAllowed('/documents', disallowed=['JD'])

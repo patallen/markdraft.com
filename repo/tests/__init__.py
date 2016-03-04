@@ -61,7 +61,6 @@ class BaseTestCase(unittest.TestCase):
 
         for action in disallowed:
             res = self.action(endpoint, action)
-
             if action.upper() not in methods:
                 raise ValueError("%s is not an accepted method." % action)
 
