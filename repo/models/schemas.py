@@ -6,13 +6,6 @@ class AuditMixin(object):
     updated_at = fields.DateTime(dump_only=True)
 
 
-class DraftSchema(AuditMixin, Schema):
-    id = fields.Integer(dump_only=True)
-    version = fields.Integer(dump_only=True)
-    title = fields.String()
-    body = fields.String()
-
-
 class DocumentSchema(AuditMixin, Schema):
     id = fields.Integer(dump_only=True)
     title = fields.String()

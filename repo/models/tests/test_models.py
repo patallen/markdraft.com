@@ -48,19 +48,6 @@ class DocumentModelTestCase(BaseTestCase):
         Share.create_or_update(user2, self.default_document, read=True)
         self.random_doc = Document({"title": "random document"})
 
-    def test_get_new_draft(self):
-        draft = self.default_document.get_new_draft()
-        self.assertIsNotNone(draft)
-        self.assertIsNotNone(self.default_document.drafts)
-        draft2 = self.default_document.get_new_draft()
-        self.assertEqual(draft2.version, 2)
-
-    def test_lastest_draft(self):
-        self.default_document.get_new_draft()
-        self.default_document.get_new_draft()
-        self.default_document.get_new_draft()
-        self.assertEqual(self.default_document.latest_draft.version, 3)
-
     def test_user_is_owner(self):
         self.assertTrue(self.default_document.user_is_owner(self.default_user))
         self.assertFalse(self.default_document.user_is_owner(self.user2))

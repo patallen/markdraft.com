@@ -15,8 +15,7 @@ class Document(AuditMixin, BaseMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(80), default="Untitled Document")
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-
-    drafts = db.relationship('Draft', backref='documents', lazy='dynamic')
+    body = db.Column(db.String())
 
     def user_is_owner(self, user):
         return self.user == user
@@ -26,47 +25,6 @@ class Document(AuditMixin, BaseMixin, db.Model):
             return True
 
         share = Share.get_share(user, self)
-        if share:
-            return getattr(share, permission)
-        return False
-
-    @property
-    def latest_draft(self):
-        return self.drafts.order_by(Draft.version.desc()).first()
-
-    def get_new_draft(self):
-        latest = self.latest_draft
-        new_version = 1
-        body = None
-        tit = None
-        if latest:
-            new_version = latest.version + 1
-            body = latest.body
-            tit = latest.title
-        draft = Draft({"version": new_version, "body": body, "title": tit})
-        self.drafts.append(draft)
-        self.save()
-        return draft
-
-
-class Draft(AuditMixin, BaseMixin, db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    document_id = db.Column(
-        db.Integer,
-        db.ForeignKey('document.id', ondelete="cascade")
-    )
-    version = db.Column(db.Integer, nullable=False)
-    title = db.Column(db.String(120))
-    body = db.Column(db.String())
-
-    def user_is_owner(self, user):
-        return self.document.user == user
-
-    def user_has_access(self, user, permission='read'):
-        if self.user_is_owner(user):
-            return True
-
-        share = Share.get_share(user, self.document)
         if share:
             return getattr(share, permission)
         return False
