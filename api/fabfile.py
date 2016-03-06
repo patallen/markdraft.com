@@ -6,7 +6,7 @@ env.use_ssh_config = True
 env.warn_only = True
 
 env.user = "vagrant"
-env.host = "10.10.10.9"
+env.host = "10.10.10.6"
 
 app_name = "api"
 
@@ -49,6 +49,12 @@ def manage(task):
 def db(task):
     with cd(root):
         run("%s/bin/python manage.py db %s" % (virtualenv, task))
+
+@hosts(connection)
+def db_init():
+    with cd(root):
+        run("%s/bin/python manage.py db init" % (virtualenv, ))
+        run("cp script.py.mako.default migrations/script.py.mako")
 
 
 @hosts(connection)
@@ -109,6 +115,8 @@ def setup_server():
     setup_virtualenv()
     setup_nginx()
     setup_db()
+    db_init()
+    db("migrate")
     db("upgrade")
 
 
