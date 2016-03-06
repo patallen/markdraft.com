@@ -45,6 +45,14 @@ class BaseMixin(object):
         for k, v in data.iteritems():
             if hasattr(self, k):
                 setattr(self, k, v)
+            else:
+                raise ValueError
+
+    @classmethod
+    def create(cls, data):
+        obj = cls(data)
+        obj.save()
+        return obj
 
     def get(self, key, default=None):
         return getattr(self, key) or default

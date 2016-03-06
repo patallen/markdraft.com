@@ -1,6 +1,6 @@
 from tests import BaseTestCase
 
-from models import Document, User, Share
+from models import Document, User, Share, db
 
 
 class BaseMixinTestCase(BaseTestCase):
@@ -33,6 +33,18 @@ class BaseMixinTestCase(BaseTestCase):
     def test_delete(self):
         self.default_document.delete()
         self.assertIsNone(Document.query.first())
+
+    def test_create(self):
+        User.create({
+            "username": "testy",
+            "email": "testy@test.com",
+            "password": "testypass"
+        })
+        db.session.flush()
+        db.session.expire_all()
+        get = User.query.filter_by(username="testy").first()
+        self.assertIsNotNone(get)
+        self.assertEqual(get.email, "testy@test.com")
 
 
 class DocumentModelTestCase(BaseTestCase):
