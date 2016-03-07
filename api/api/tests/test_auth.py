@@ -11,8 +11,6 @@ class TestJWTTestCase(BaseTestCase):
             username=self.default_user.username,
             user_id=self.default_user.id,
         ))
-        self.assertIsNotNone(claims.get('iat'))
-        self.assertIsNotNone(claims.get('exp'))
         self.assertEqual(claims.get('username'), self.default_user.username)
 
     def test_create_token_for_user(self):
@@ -25,10 +23,6 @@ class TestJWTTestCase(BaseTestCase):
         self.assertTrue(payload)
         self.assertEqual(payload.get('first_name'), 'Test')
         self.assertFalse(jwt.verify_token("kdsjfldkfjkdajlf"))
-
-        bad_token = jwt.jwt.dumps({"exp": 0})
-        payload = jwt.verify_token(bad_token)
-        self.assertFalse(payload)
 
     def test_require_jwt_decorator(self):
         mock = Mock(return_value="success")

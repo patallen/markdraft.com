@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from flask import request, Response, g
-from itsdangerous import JSONWebSignatureSerializer, BadSignature
+from itsdangerous import TimedJSONWebSignatureSerializer, BadSignature
 
 from api import app
 import functools as func
@@ -16,17 +16,11 @@ if app.config.get('JWT_TOKEN_PREFIX') is not None:
     JWT_PREFIX = "%s " % app.config.get('JWT_TOKEN_PREFIX')
 
 
-jwt = JSONWebSignatureSerializer(SECRET_KEY)
+jwt = TimedJSONWebSignatureSerializer(SECRET_KEY)
 
 
 def generate_claims(claims=None):
-    now = dates.timestamp(datetime.now())
-    exp = now + EXPIRE_TIME
-    rv = {"iat": now, "exp": exp}
-    for k, v in claims.iteritems():
-        if not hasattr(rv, k):
-            rv[k] = v
-    return rv
+    return {k: v for k, v in claims.iteritems()}
 
 
 def create_token_for_user(user):
@@ -43,13 +37,8 @@ def create_token_for_user(user):
 def verify_token(token):
     try:
         payload = jwt.loads(token)
-    except BadSignature:
-        print "Bad Signature"
-        return False
-
-    now = dates.timestamp(datetime.now())
-    exp = payload.get('exp', 0)
-    if int(now) > int(exp):
+    except Exception as e:
+        # Should either log here, or catch different exceptions
         return False
     return payload
 
