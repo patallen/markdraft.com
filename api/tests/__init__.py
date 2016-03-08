@@ -11,15 +11,14 @@ class BaseTestCase(unittest.TestCase):
         self.app = app.test_client()
         db.create_all()
         tag = Tag(title="TAGGY")
-        user = User(
+        self.default_user = User(
             username="testuser",
             password="123abc",
             first_name="Test",
             last_name="User"
         )
-        user.tags.append(tag)
-        user.save()
-        self.default_user = user
+        self.default_user.tags.append(tag)
+        self.default_user.save()
         document = Document(
             title="This is a Test Title",
             user_id=self.default_user.id

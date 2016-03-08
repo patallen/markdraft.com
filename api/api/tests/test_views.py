@@ -1,6 +1,6 @@
 import json
 
-from models import User, Document
+from models import User, Document, Tag
 from tests import BaseTestCase
 
 
@@ -119,3 +119,23 @@ class DocumentsViewsTestCase(BaseTestCase):
         self.assertStatus200(res)
         doc = Document.query.get(1)
         self.assertIsNone(doc)
+
+
+class TagsViewsTestCase(BaseTestCase):
+    def setUp(self):
+        super(TagsViewsTestCase, self).setUp()
+
+    def test_create_tag(self):
+        user_id = self.default_user.id
+        tag_dict = json.dumps({"title": "TEST TAG"})
+        res = self.app.post('/tags', data=tag_dict, headers=self.headers)
+
+        tag = Tag.query.filter_by(title="TEST TAG").first()
+
+        self.assertStatus(res, 201)
+        self.assertIsNotNone(tag)
+        self.assertEqual(user_id, tag.user_id)
+
+    def test_get_tag(self):
+        res = self.app.get('/tags/1', headers=self.headers)
+        self.assertStatus200(res)

@@ -1,6 +1,7 @@
-from flask import request
+from flask import request, g
 
 from api import app
+from api.auth import jwt
 from marklib.request import MakeResponse
 from models import Tag, schemas
 
@@ -12,9 +13,11 @@ tags_schema = schemas.TagSchema(many=True)
 
 
 @app.route("/tags", methods=['POST'])
+@jwt.require_jwt
 def create_tag():
+    user = g.current_user
     data = tag_schema.load(request.get_json()).data
-    user_id = 2  # get user from current_user
+    user_id = user.id
     tag = Tag(data)
     tag.user_id = user_id
     tag.save()
@@ -26,7 +29,7 @@ def create_tag():
 def get_tag(tag_id):
     tag = Tag.query.get_or_404(tag_id)
     tag = tag_schema.dump(tag).data
-    xhr = MakeResponse(body=tag)
+    xhr = MakeResponse(200, body=tag)
     return xhr.response
 
 
