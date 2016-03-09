@@ -1,6 +1,6 @@
 from tests import BaseTestCase
 
-from models import Document, User, Share, db
+from data.models import Document, User, Share, db
 
 
 class BaseMixinTestCase(BaseTestCase):

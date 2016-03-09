@@ -1,6 +1,6 @@
 import unittest
 
-from models import Document, Tag, User, db
+from data.models import Document, Tag, User, db
 from api import config, app
 from api.auth import jwt
 

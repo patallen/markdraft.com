@@ -1,18 +1,18 @@
-from flask import request, g
+from flask import request, g, Blueprint
 
-from api import app
 from api.auth import jwt
 from marklib.request import MakeResponse
-from models import Tag, schemas
+from data.models import Tag, schemas
 
 from api.views.documents import documents_schema
 
+blueprint = Blueprint('tag', __name__, url_prefix='/tags')
 
 tag_schema = schemas.TagSchema()
 tags_schema = schemas.TagSchema(many=True)
 
 
-@app.route("/tags", methods=['POST'])
+@blueprint.route("/", methods=['POST'])
 @jwt.require_jwt
 def create_tag():
     user = g.current_user
@@ -25,7 +25,7 @@ def create_tag():
     return xhr.response
 
 
-@app.route("/tags/<int:tag_id>")
+@blueprint.route("/<int:tag_id>")
 def get_tag(tag_id):
     tag = Tag.query.get_or_404(tag_id)
     tag = tag_schema.dump(tag).data
@@ -33,7 +33,7 @@ def get_tag(tag_id):
     return xhr.response
 
 
-@app.route("/tags/<int:tag_id>")
+@blueprint.route("/<int:tag_id>")
 def delete_tag(tag_id):
     tag = Tag.query.get_or_404(tag_id)
     tag.delete()
@@ -41,7 +41,7 @@ def delete_tag(tag_id):
     return xhr.response
 
 
-@app.route("/tags/<int:tag_id>/documents")
+@blueprint.route("/<int:tag_id>/documents")
 def get_docs_for_tag(tag_id):
     tag = Tag.query.get_or_404(tag_id)
     docs = documents_schema.dump(tag.documents).data

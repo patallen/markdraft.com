@@ -1,5 +1,5 @@
 from datetime import datetime
-from models import db
+from data.models import db
 
 
 class AuditMixin(object):

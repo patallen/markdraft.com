@@ -1,7 +1,7 @@
 from flask import Response
 
 from . import BaseTestCase
-from models import User
+from data.models import User
 
 
 class TestingTestCase(BaseTestCase):

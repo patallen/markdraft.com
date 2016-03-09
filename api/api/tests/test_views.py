@@ -1,6 +1,6 @@
 import json
 
-from models import User, Document, Tag
+from data.models import User, Document, Tag
 from tests import BaseTestCase
 
 

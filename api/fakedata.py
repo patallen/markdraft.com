@@ -1,7 +1,8 @@
 from faker import Factory as FakerFactory
 import factory
 
-from models import Document, Share, User, db
+from data.models import Document, Share, User
+from data import db
 from marklib.helpers import random_int
 
 

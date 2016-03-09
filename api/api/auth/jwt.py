@@ -6,7 +6,7 @@ from itsdangerous import TimedJSONWebSignatureSerializer, BadSignature
 from api import app
 import functools as func
 from marklib.formats import dates
-from models import User
+from data.models import User
 
 
 EXPIRE_TIME = app.config.get('JWT_EXPIRE_TIME')

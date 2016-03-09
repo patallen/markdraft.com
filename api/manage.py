@@ -1,16 +1,19 @@
 from flask_migrate import Migrate, MigrateCommand
+from flask_script import Manager, Server, Shell
 
-from api import app
-from api.factories import create_manager
-from models import db
+from api.app import create_app
+from api import config
+from data import db
+from data.models import User
 import fakedata
 
-
-manager = create_manager(app)
+app = create_app(config.Development)
+manager = Manager(app)
 migrate = Migrate(app, db)
-manager.add_command("db", MigrateCommand)
 
-from models import *
+
+def _make_context():
+    return {'app': app, 'db': db, 'User': User}
 
 
 @manager.command
@@ -33,6 +36,12 @@ def fake_all(verbose=True):
     fake_users()
     fake_documents(verbose=verbose)
     fake_shares(verbose=verbose)
+
+
+manager.add_command("db", MigrateCommand)
+manager.add_command("shell", Shell(make_context=_make_context))
+manager.add_command("runserver", Server(host="0.0.0.0", port=8000))
+
 
 if __name__ == "__main__":
     manager.run()

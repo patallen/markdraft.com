@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy(app)
 
-from models.mixins import AuditMixin, BaseMixin
+from data.models.mixins import AuditMixin, BaseMixin
 from uuid import uuid4
 from marklib.db import GUID
 from werkzeug.security import (
