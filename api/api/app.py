@@ -1,6 +1,5 @@
 from flask import Flask
 from data import db
-
 from api.views import auth, documents, tags, users
 
 

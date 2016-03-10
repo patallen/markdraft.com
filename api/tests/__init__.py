@@ -13,35 +13,41 @@ class BaseTestCase(unittest.TestCase):
         self.app_context = self.app.app_context()
         self.client = self.app.test_client()
         self.app_context.push()
+        db.drop_all()
         db.create_all()
-        tag = Tag(title="TAGGY")
-        self.default_user = User(
+        self.user = dict(
             username="testuser",
             password="123abc",
             first_name="Test",
             last_name="User"
         )
-        self.default_user.tags.append(tag)
-        document = Document(
+        self.document = dict(
             title="This is a Test Title",
-            user_id=self.default_user.id
+            body="Body Body Body, likeasomebody"
         )
-        self.default_document = document
+        self.tag = {"title": "TAGGY"}
+
+        self.default_user = User(self.user)
+        self.document = Document(self.document)
+        self.document.user = self.default_user
+        self.tag = Tag(self.tag)
+        self.tag.user = self.default_user
+        self.document.tags.append(self.tag)
+
+        db.session.add(self.default_user)
+        db.session.add(self.document)
+        db.session.add(self.tag)
+        db.session.commit()
 
         token = jwt.create_token_for_user(self.default_user)
         self.headers = [
             ('Content-Type', 'application/json'),
             ('Authorization', 'Bearer %s' % token)
         ]
-        db.session.add(document)
-        db.session.add(self.default_user)
-        db.session.add(tag)
-        db.session.commit()
 
     def tearDown(self):
         db.session.remove()
         db.drop_all()
-        self.app_context.pop()
 
     def assertAllIn(self, theirs, ours):
         for val in ours:

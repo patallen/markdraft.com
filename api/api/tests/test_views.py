@@ -96,6 +96,7 @@ class DocumentsViewsTestCase(BaseTestCase):
             "title": "TEST DOC",
         })
         res = self.client.post("/documents", data=req, headers=self.headers)
+        print res.headers
 
         self.assertStatus(res, 201)
         self.assertIsNotNone(Document.query.filter_by(title="TEST DOC").all())

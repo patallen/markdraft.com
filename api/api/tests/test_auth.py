@@ -1,6 +1,5 @@
 from mock import Mock
 
-from api import app
 from api.auth import jwt
 from tests import BaseTestCase
 
@@ -35,21 +34,20 @@ class TestJWTTestCase(BaseTestCase):
             "Authorization": "this-is-not-a-token"
         }
         token = jwt.create_token_for_user(self.default_user)
+        with self.app.test_request_context(headers=bad_header):
+            res = mock_fn()
+            self.assertEqual(401, res[1])
+
+        with self.app.test_request_context(headers=nobearer_header):
+            res = mock_fn()
+            self.assertEqual(401, res[1])
+
+        with self.app.test_request_context():
+            res = mock_fn()
+            self.assertEqual(401, res[1])
         good_header = {
             "Authorization": "Bearer %s" % token
         }
-        with app.test_request_context(headers=bad_header):
+        with self.app.test_request_context(headers=good_header):
             res = mock_fn()
-            self.assertEqual(401, res[1])
-
-        with app.test_request_context(headers=good_header):
-            res = mock_fn()
-            self.assertEqual("success", res)
-
-        with app.test_request_context(headers=nobearer_header):
-            res = mock_fn()
-            self.assertEqual(401, res[1])
-
-        with app.test_request_context():
-            res = mock_fn()
-            self.assertEqual(401, res[1])
+            self.assertEqual(res[0].status_code, 200)
