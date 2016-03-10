@@ -18,6 +18,7 @@ class Development(Config):
 
 
 class Testing(Config):
+    PRESERVE_CONTEXT_ON_EXCEPTION = False
     DEBUG = True
     TESTING = True
     APP_NAME = 'markdraft_test'

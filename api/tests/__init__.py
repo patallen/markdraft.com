@@ -1,14 +1,18 @@
 import unittest
 
-from data.models import Document, Tag, User, db
-from api import config, app
+from api.app import create_app
+from api import config
 from api.auth import jwt
+from data.models import Document, Tag, User, db
 
 
 class BaseTestCase(unittest.TestCase):
     def setUp(self):
-        app.config.from_object(config.Testing)
-        self.app = app.test_client()
+        super(BaseTestCase, self).setUp()
+        self.app = create_app(config.Testing)
+        self.app_context = self.app.app_context()
+        self.client = self.app.test_client()
+        self.app_context.push()
         db.create_all()
         tag = Tag(title="TAGGY")
         self.default_user = User(
@@ -18,12 +22,10 @@ class BaseTestCase(unittest.TestCase):
             last_name="User"
         )
         self.default_user.tags.append(tag)
-        self.default_user.save()
         document = Document(
             title="This is a Test Title",
             user_id=self.default_user.id
         )
-        document.save()
         self.default_document = document
 
         token = jwt.create_token_for_user(self.default_user)
@@ -31,10 +33,15 @@ class BaseTestCase(unittest.TestCase):
             ('Content-Type', 'application/json'),
             ('Authorization', 'Bearer %s' % token)
         ]
+        db.session.add(document)
+        db.session.add(self.default_user)
+        db.session.add(tag)
+        db.session.commit()
 
     def tearDown(self):
         db.session.remove()
         db.drop_all()
+        self.app_context.pop()
 
     def assertAllIn(self, theirs, ours):
         for val in ours:
@@ -71,4 +78,4 @@ class BaseTestCase(unittest.TestCase):
 
     def action(self, endpoint, method, **kwargs):
         kwargs['method'] = method.upper()
-        return self.app.open(endpoint, **kwargs)
+        return self.client.open(endpoint, **kwargs)

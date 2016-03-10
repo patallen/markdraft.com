@@ -11,7 +11,7 @@ documents_schema = schemas.DocumentSchema(many=True)
 
 
 # Document CREATE
-@blueprint.route("/", methods=['POST'])
+@blueprint.route("", methods=['POST'])
 @jwt.require_jwt
 def create_document():
     user = g.current_user

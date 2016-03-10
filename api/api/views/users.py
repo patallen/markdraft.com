@@ -29,7 +29,7 @@ def get_user_tags(user_id):
 
 
 # Get Users
-@blueprint.route("/")
+@blueprint.route("")
 def get_users():
     users = User.query.all()
     users = [u.to_dict(include='is_admin') for u in users]

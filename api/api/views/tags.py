@@ -12,7 +12,7 @@ tag_schema = schemas.TagSchema()
 tags_schema = schemas.TagSchema(many=True)
 
 
-@blueprint.route("/", methods=['POST'])
+@blueprint.route("", methods=['POST'])
 @jwt.require_jwt
 def create_tag():
     user = g.current_user
