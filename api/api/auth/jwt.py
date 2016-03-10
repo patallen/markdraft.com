@@ -1,22 +1,9 @@
-from datetime import datetime
-
-from flask import request, Response, g
-from itsdangerous import TimedJSONWebSignatureSerializer, BadSignature
-
-from api import app
 import functools as func
-from marklib.formats import dates
+
+from itsdangerous import TimedJSONWebSignatureSerializer
+from flask import request, Response, g, current_app as app
+
 from data.models import User
-
-
-EXPIRE_TIME = app.config.get('JWT_EXPIRE_TIME')
-SECRET_KEY = app.config.get('JWT_SECRET_KEY')
-
-if app.config.get('JWT_TOKEN_PREFIX') is not None:
-    JWT_PREFIX = "%s " % app.config.get('JWT_TOKEN_PREFIX')
-
-
-jwt = TimedJSONWebSignatureSerializer(SECRET_KEY)
 
 
 def generate_claims(claims=None):
@@ -24,6 +11,8 @@ def generate_claims(claims=None):
 
 
 def create_token_for_user(user):
+    SECRET_KEY = app.config.get('JWT_SECRET_KEY')
+    jwt = TimedJSONWebSignatureSerializer(SECRET_KEY)
     fname = user.first_name or user.username
     user = dict(
         username=user.username,
@@ -35,6 +24,8 @@ def create_token_for_user(user):
 
 
 def verify_token(token):
+    SECRET_KEY = app.config.get('JWT_SECRET_KEY')
+    jwt = TimedJSONWebSignatureSerializer(SECRET_KEY)
     try:
         payload = jwt.loads(token)
     except Exception as e:
@@ -46,6 +37,7 @@ def verify_token(token):
 def require_jwt(f):
     @func.wraps(f)
     def wrapper(*args, **kwargs):
+        JWT_PREFIX = app.config.get('JWT_TOKEN_PREFIX')
         auth_header = request.headers.get('Authorization', None)
 
         if auth_header is None:

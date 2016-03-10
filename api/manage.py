@@ -1,10 +1,11 @@
 from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager, Server, Shell
 
+from data.models import User
 from api.app import create_app
 from api import config
 from data import db
-from data.models import User
+
 import fakedata
 
 app = create_app(config.Development)

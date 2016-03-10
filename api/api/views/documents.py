@@ -1,10 +1,10 @@
 from flask import request, g, Blueprint
 
-from api.auth import jwt
 from marklib.request import MakeResponse
 from data.models import Document, schemas
+from api.auth import jwt
 
-blueprint = Blueprint('document', __name__, url_prefix='/document')
+blueprint = Blueprint('document', __name__, url_prefix='/documents')
 
 document_schema = schemas.DocumentSchema()
 documents_schema = schemas.DocumentSchema(many=True)
