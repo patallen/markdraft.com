@@ -132,6 +132,7 @@ class TagsViewsTestCase(BaseTestCase):
         res = self.client.post('/tags', data=tag_dict, headers=self.headers)
 
         tag = Tag.query.filter_by(title="TEST TAG").first()
+        print tag
 
         self.assertStatus(res, 201)
         self.assertIsNotNone(tag)

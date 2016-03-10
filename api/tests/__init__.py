@@ -3,7 +3,8 @@ import unittest
 from api.app import create_app
 from api import config
 from api.auth import jwt
-from data.models import Document, Tag, User, db
+from data import db
+from data.models import Document, Tag, User
 
 
 class BaseTestCase(unittest.TestCase):
@@ -13,8 +14,8 @@ class BaseTestCase(unittest.TestCase):
         self.app_context = self.app.app_context()
         self.client = self.app.test_client()
         self.app_context.push()
-        db.drop_all()
-        db.create_all()
+        self.db = db
+        self.db.create_all()
         self.user = dict(
             username="testuser",
             password="123abc",
@@ -28,16 +29,16 @@ class BaseTestCase(unittest.TestCase):
         self.tag = {"title": "TAGGY"}
 
         self.default_user = User(self.user)
-        self.document = Document(self.document)
-        self.document.user = self.default_user
+        self.default_document = Document(self.document)
+        self.default_document.user = self.default_user
         self.tag = Tag(self.tag)
         self.tag.user = self.default_user
-        self.document.tags.append(self.tag)
+        self.default_document.tags.append(self.tag)
 
-        db.session.add(self.default_user)
-        db.session.add(self.document)
-        db.session.add(self.tag)
-        db.session.commit()
+        self.db.session.add(self.default_user)
+        self.db.session.add(self.default_document)
+        self.db.session.add(self.tag)
+        self.db.session.commit()
 
         token = jwt.create_token_for_user(self.default_user)
         self.headers = [
@@ -46,8 +47,8 @@ class BaseTestCase(unittest.TestCase):
         ]
 
     def tearDown(self):
-        db.session.remove()
-        db.drop_all()
+        self.db.session.remove()
+        self.db.drop_all()
 
     def assertAllIn(self, theirs, ours):
         for val in ours:

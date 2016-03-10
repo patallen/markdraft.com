@@ -1,10 +1,11 @@
 from datetime import datetime
 
+import unittest
+
 from marklib.formats import dates
-from tests import BaseTestCase
 
 
-class TestTimestampTestCase(BaseTestCase):
+class TestTimestampTestCase(unittest.TestCase):
 
     def setUp(self):
         self.dt = datetime(1990, 2, 25)
