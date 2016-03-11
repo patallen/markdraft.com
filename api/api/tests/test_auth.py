@@ -50,4 +50,4 @@ class TestJWTTestCase(BaseTestCase):
         }
         with self.app.test_request_context(headers=good_header):
             res = mock_fn()
-            self.assertEqual(res[0].status_code, 200)
+            self.assertEqual("success", res)

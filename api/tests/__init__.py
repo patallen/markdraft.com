@@ -15,6 +15,7 @@ class BaseTestCase(unittest.TestCase):
         self.client = self.app.test_client()
         self.app_context.push()
         self.db = db
+        self.db.drop_all()
         self.db.create_all()
         self.user = dict(
             username="testuser",
