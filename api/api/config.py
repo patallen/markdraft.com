@@ -5,6 +5,7 @@ class Config(object):
     JWT_EXPIRE_TIME = 3600
     JWT_TOKEN_PREFIX = "Bearer"
 
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
     SECRET_KEY = "change-this-in-production"
     LOG_LEVEL = 'DEBUG'
     SQLALCHEMY_POOL_SIZE = 5
