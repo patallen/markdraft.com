@@ -10,6 +10,7 @@ documents_schema = schemas.DocumentSchema(many=True)
 
 # User's Document GET (ALL)
 @blueprint.route("/<int:user_id>/documents")
+@jwt.require_jwt
 def get_user_documents(user_id):
     docs = User.query.get(user_id).documents
     docs = documents_schema.dump(docs)
@@ -30,6 +31,7 @@ def get_user_tags(user_id):
 
 # Get Users
 @blueprint.route("")
+@jwt.require_jwt
 def get_users():
     users = User.query.all()
     users = [u.to_dict(include='is_admin') for u in users]

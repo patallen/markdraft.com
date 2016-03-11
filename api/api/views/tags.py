@@ -26,6 +26,7 @@ def create_tag():
 
 
 @blueprint.route("/<int:tag_id>")
+@jwt.require_jwt
 def get_tag(tag_id):
     tag = Tag.query.get_or_404(tag_id)
     tag = tag_schema.dump(tag).data
@@ -34,6 +35,7 @@ def get_tag(tag_id):
 
 
 @blueprint.route("/<int:tag_id>")
+@jwt.require_jwt
 def delete_tag(tag_id):
     tag = Tag.query.get_or_404(tag_id)
     tag.delete()
@@ -42,6 +44,7 @@ def delete_tag(tag_id):
 
 
 @blueprint.route("/<int:tag_id>/documents")
+@jwt.require_jwt
 def get_docs_for_tag(tag_id):
     tag = Tag.query.get_or_404(tag_id)
     docs = documents_schema.dump(tag.documents).data

@@ -17,14 +17,14 @@ class UsersViewsTestCase(BaseTestCase):
         }
 
     def test_users_get(self):
-        res = self.client.get('/users')
+        res = self.client.get('/users', headers=self.headers)
         self.assertStatus200(res)
         results = json.loads(res.data).get('results')
         self.assertEqual(len(results), 1)
         self.assertNotAllowed("/users", allowed=["GET"])
 
     def test_users_documents(self):
-        get = self.client.get('/users/1/documents')
+        get = self.client.get('/users/1/documents', headers=self.headers)
         self.assertStatus(get, 200)
         results = json.loads(get.data).get('results')
         self.assertEqual(len(results), 1)
@@ -101,7 +101,7 @@ class DocumentsViewsTestCase(BaseTestCase):
         self.assertIsNotNone(Document.query.filter_by(title="TEST DOC").all())
 
     def test_get_document(self):
-        res = self.client.get('/documents/1')
+        res = self.client.get('/documents/1', headers=self.headers)
         results = json.loads(res.data).get('results')
         self.assertStatus200(res)
         self.assertAllIn(results, ['created_at', 'title', 'updated_at', 'id'])
@@ -122,8 +122,6 @@ class DocumentsViewsTestCase(BaseTestCase):
 
 
 class TagsViewsTestCase(BaseTestCase):
-    def setUp(self):
-        super(TagsViewsTestCase, self).setUp()
 
     def test_create_tag(self):
         user_id = self.default_user.id

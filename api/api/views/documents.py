@@ -25,13 +25,16 @@ def create_document():
 
 # Document GET, PUT, DELETE
 @blueprint.route("/<int:doc_id>")
+@jwt.require_jwt
 def get_document(doc_id):
-    doc = document_schema.dump(Document.query.get_or_404(doc_id))
+    doc = Document.query.get_or_404((doc_id))
+    doc = document_schema.dump(doc)
     xhr = MakeResponse(200, body=doc.data)
     return xhr.response
 
 
 @blueprint.route("/<int:doc_id>", methods=['PUT'])
+@jwt.require_jwt
 def edit_document(doc_id):
     data = document_schema.load(request.get_json())
     doc = Document.query.get_or_404(doc_id)
@@ -43,6 +46,7 @@ def edit_document(doc_id):
 
 
 @blueprint.route("/<int:doc_id>", methods=['DELETE'])
+@jwt.require_jwt
 def delete_document(doc_id):
     doc = Document.query.get_or_404(doc_id)
     doc.delete()
