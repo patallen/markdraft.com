@@ -36,15 +36,15 @@ class TestJWTTestCase(BaseTestCase):
         token = jwt.create_token_for_user(self.default_user)
         with self.app.test_request_context(headers=bad_header):
             res = mock_fn()
-            self.assertEqual(401, res[1])
+            self.assertEqual(401, res.status_code)
 
         with self.app.test_request_context(headers=nobearer_header):
             res = mock_fn()
-            self.assertEqual(401, res[1])
+            self.assertEqual(401, res.status_code)
 
         with self.app.test_request_context():
             res = mock_fn()
-            self.assertEqual(401, res[1])
+            self.assertEqual(401, res.status_code)
         good_header = {
             "Authorization": "Bearer %s" % token
         }

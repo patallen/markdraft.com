@@ -14,7 +14,7 @@ documents_schema = schemas.DocumentSchema(many=True)
 def get_user_documents(user_id):
     docs = User.query.get(user_id).documents
     docs = documents_schema.dump(docs)
-    xhr = MakeResponse(body=docs.data)
+    xhr = MakeResponse(200, body=docs.data)
     return xhr.response
 
 
@@ -25,7 +25,7 @@ def get_user_tags(user_id):
     user = User.query.get_or_404(user_id)
     tags = user.tags
     tags = [t.to_dict() for t in tags]
-    xhr = MakeResponse(body=tags)
+    xhr = MakeResponse(200, body=tags)
     return xhr.response
 
 
@@ -35,5 +35,5 @@ def get_user_tags(user_id):
 def get_users():
     users = User.query.all()
     users = [u.to_dict(include='is_admin') for u in users]
-    xhr = MakeResponse(body=users)
+    xhr = MakeResponse(200, body=users)
     return xhr.response

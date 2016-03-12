@@ -4,6 +4,7 @@ from itsdangerous import TimedJSONWebSignatureSerializer
 from flask import request, Response, g, current_app as app
 
 from data.models import User
+from marklib.request import MakeResponse
 
 
 def generate_claims(claims=None):
@@ -40,20 +41,19 @@ def require_jwt(f):
         JWT_PREFIX = app.config.get('JWT_TOKEN_PREFIX')
         auth_header = request.headers.get('Authorization', None)
 
-        token = None
+        payload = None
+
+        xhr = MakeResponse()
+        xhr.set_error(401, "Authorization Required")
 
         if auth_header is None:
-            return Response("Authorization Required"), 401
+            return xhr.response
 
-        if auth_header.startswith(JWT_PREFIX):
-            token = auth_header[len(JWT_PREFIX):].strip()
+        if len(auth_header) > 0 and auth_header.startswith(JWT_PREFIX):
+            payload = verify_token(auth_header[len(JWT_PREFIX):].strip())
 
-        if token is None:
-            return Response("Authorization Required"), 401
-
-        payload = verify_token(token)
         if not payload:
-            return Response("Could not authorize."), 401
+            return xhr.response
 
         user_id = payload.get('user_id')
         g.current_user = User.query.get(user_id)
