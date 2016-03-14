@@ -34,12 +34,12 @@ def get_tag(tag_id):
     return xhr.response
 
 
-@blueprint.route("/<int:tag_id>")
+@blueprint.route("/<int:tag_id>", methods=['DELETE'])
 @jwt.require_jwt
 def delete_tag(tag_id):
     tag = Tag.query.get_or_404(tag_id)
     tag.delete()
-    xhr = MakeResponse()
+    xhr = MakeResponse(200)
     return xhr.response
 
 
@@ -48,5 +48,5 @@ def delete_tag(tag_id):
 def get_docs_for_tag(tag_id):
     tag = Tag.query.get_or_404(tag_id)
     docs = documents_schema.dump(tag.documents).data
-    xhr = MakeResponse(body=docs)
+    xhr = MakeResponse(200, body=docs)
     return xhr.response
