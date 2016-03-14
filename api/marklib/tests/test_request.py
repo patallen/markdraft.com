@@ -9,6 +9,8 @@ class MakeResponseTestCase(BaseTestCase):
         xhr = request.MakeResponse(404, error="ERROR")
         self.assertEqual(xhr.response.status_code, 404)
         self.assertTrue("ERROR" in xhr.response.data)
+        xhr = request.MakeResponse(body="Initting with no code")
+        self.assertStatus200(xhr.response)
 
     def test_set_body(self):
         res = request.MakeResponse(200)

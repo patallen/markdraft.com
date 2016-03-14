@@ -12,9 +12,10 @@ class MakeResponse(object):
 
     def __init__(self, status_code=None, body=None, error=None):
         self.response.set_data({})
-        self.res_dict = {
-            "status": "success",
-        }
+        self.set_status(200)
+
+        self.res_dict = {"status": "success"}
+
         if status_code:
             self.set_status(status_code)
         if body:
