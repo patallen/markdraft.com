@@ -104,3 +104,43 @@ class UserModelTestCase(BaseTestCase):
         new_doc.save()
         self.assertFalse(self.default_user.owns_document(new_doc))
 
+
+class SharesTestCase(BaseTestCase):
+    def setUp(self):
+        super(SharesTestCase, self).setUp()
+        self.user2 = User(
+            username="user2",
+            password="pwpwpw",
+            email="user2@gmail.com"
+        )
+        self.user2.save()
+        Share.create_or_update(self.user2, self.default_document)
+
+    def test_create_or_update_share(self):
+        Share.create_or_update(self.user2, self.default_document)
+        Share.create_or_update(
+            self.user2, self.default_document, write=True
+        )
+        self.assertTrue(
+            self.default_document.user_has_access(self.user2, 'write')
+        )
+
+    def test_get_share(self):
+        with self.assertRaises(ValueError):
+            Share.get_share(user=self.default_user)
+
+        self.assertIsNotNone(
+            Share.get_share(self.user2, self.default_document)
+        )
+
+    def test_shares_for_user_query(self):
+        query = Share.shares_for_user_query(user=self.user2)
+        self.assertIsNotNone(query.all())
+        self.assertIsNone(Share.shares_for_user_query())
+
+    def test_shares_for_user(self):
+        readable = Share.shares_for_user(user=self.user2, read=True)
+        self.assertGreater(len(readable), 0)
+
+        writable = Share.shares_for_user(user=self.user2, write=True)
+        self.assertEqual(len(writable), 0)
