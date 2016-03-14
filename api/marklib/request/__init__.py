@@ -32,10 +32,10 @@ class MakeResponse(object):
 
     def set_body(self, data):
         self.res_dict["results"] = data
-        if hasattr(self.res_dict, "error"):
+        if self.res_dict.get("error"):
             self.res_dict.pop("error")
 
-    def set_status(self, code=None, msg=None):
+    def set_status(self, code=None):
         self._response.status_code = code
         if code < 200 or code >= 300:
             self.res_dict["status"] = "error"
@@ -45,7 +45,7 @@ class MakeResponse(object):
     def set_error(self, code=None, msg=None):
         self.res_dict["error"] = msg
         self.res_dict["status"] = "error"
-        if hasattr(self.res_dict, 'results'):
+        if self.res_dict.get('results'):
             self.res_dict.pop("results")
         if code:
             self.set_status(code)
