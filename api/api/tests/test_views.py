@@ -81,12 +81,21 @@ class UsersViewsTestCase(BaseTestCase):
         self.assertStatus(res, 401)
         self.assertTrue('Trouble authenticating' in res.data)
 
-    def test_get_user_tags(self):
+    def test_get_user_tags_owner(self):
         get = self.client.get('/users/1/tags', headers=self.headers)
         self.assertStatus(get, 200)
         results = json.loads(get.data).get('results')
         self.assertEqual(len(results), 1)
         self.assertNotAllowed("/users/1/tags", allowed=['GET'])
+
+    def test_get_user_tags_not_owner(self):
+        user = User(username='pat', password='ddd', email='ddd@ddd.com')
+        user.save()
+        get = self.client.get(
+            '/users/%s/tags' % user.id,
+            headers=self.headers
+        )
+        self.assertStatus(get, 401)
 
 
 class DocumentsViewsTestCase(BaseTestCase):
