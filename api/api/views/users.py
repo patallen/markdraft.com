@@ -1,5 +1,6 @@
 from flask import Blueprint
 
+from api import helpers
 from api.auth import jwt
 from marklib.request import MakeResponse
 from data.models import User, schemas
@@ -12,8 +13,13 @@ documents_schema = schemas.DocumentSchema(many=True)
 @blueprint.route("/<int:user_id>/documents")
 @jwt.require_jwt
 def get_user_documents(user_id):
-    docs = User.query.get(user_id).documents
-    docs = documents_schema.dump(docs)
+    user = helpers.get_user()
+    available = helpers.filter_by_access(
+        user,
+        User.query.get(user_id).documents,
+        permissions=('read',)
+    )
+    docs = documents_schema.dump(available)
     xhr = MakeResponse(200, body=docs.data)
     return xhr.response
 
@@ -22,10 +28,14 @@ def get_user_documents(user_id):
 @blueprint.route("/<int:user_id>/tags")
 @jwt.require_jwt
 def get_user_tags(user_id):
-    user = User.query.get_or_404(user_id)
-    tags = user.tags
+    user = helpers.get_user()
+    xhr = MakeResponse()
+    if user.id is not user_id:
+        xhr.set_error(401)
+        return xhr.response
+    tags = User.query.get_or_404(user_id).tags
     tags = [t.to_dict() for t in tags]
-    xhr = MakeResponse(200, body=tags)
+    xhr.set_body(tags)
     return xhr.response
 
 
