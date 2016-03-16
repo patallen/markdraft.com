@@ -17,10 +17,8 @@ tags_schema = schemas.TagSchema(many=True)
 def create_tag():
     user = g.current_user
     data = tag_schema.load(request.get_json()).data
-    user_id = user.id
-    tag = Tag(data)
-    tag.user_id = user_id
-    tag.save()
+    data["user"] = user
+    tag = Tag.create(data)
     xhr = MakeResponse(201, tag.to_dict())
     return xhr.response
 

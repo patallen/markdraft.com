@@ -29,16 +29,12 @@ class BaseTestCase(unittest.TestCase):
         )
         self.tag = {"title": "TAGGY"}
 
-        self.default_user = User(self.user)
-        self.default_document = Document(self.document)
+        self.default_user = User.create(self.user)
+        self.default_document = Document.create(self.document)
         self.default_document.user = self.default_user
-        self.tag = Tag(self.tag)
+        self.tag = Tag.create(self.tag)
         self.tag.user = self.default_user
         self.default_document.tags.append(self.tag)
-
-        self.db.session.add(self.default_user)
-        self.db.session.add(self.default_document)
-        self.db.session.add(self.tag)
         self.db.session.commit()
 
         token = jwt.create_token_for_user(self.default_user)

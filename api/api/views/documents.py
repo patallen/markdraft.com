@@ -1,8 +1,9 @@
-from flask import request, g, Blueprint
+from flask import request, Blueprint
 
 from marklib.request import MakeResponse
 from data.models import Document, schemas
 from api.auth import jwt
+import api.helpers
 
 blueprint = Blueprint('document', __name__, url_prefix='/documents')
 
@@ -14,11 +15,10 @@ documents_schema = schemas.DocumentSchema(many=True)
 @blueprint.route("", methods=['POST'])
 @jwt.require_jwt
 def create_document():
-    user = g.current_user
+    user = api.helpers.get_user()
     data = document_schema.load(request.get_json()).data
-    doc = Document(data)
-    doc.user_id = user.id
-    doc.save()
+    data['user'] = user
+    doc = Document.create(data)
     xhr = MakeResponse(201, document_schema.dump(doc).data)
     return xhr.response
 

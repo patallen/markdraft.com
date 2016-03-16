@@ -50,15 +50,13 @@ class BaseMixinTestCase(BaseTestCase):
 class DocumentModelTestCase(BaseTestCase):
     def setUp(self):
         super(DocumentModelTestCase, self).setUp()
-        user2 = User({
+        self.user2 = User.create({
             "username": "user2",
             "email": "user2@user.com",
             "password": "user2",
         })
-        user2.save()
-        self.user2 = user2
-        Share.create_or_update(user2, self.default_document, read=True)
-        self.random_doc = Document({"title": "random document"})
+        Share.create_or_update(self.user2, self.default_document, read=True)
+        self.random_doc = Document.create({"title": "random document"})
 
     def test_user_is_owner(self):
         self.assertTrue(self.default_document.user_is_owner(self.default_user))
@@ -100,20 +98,18 @@ class UserModelTestCase(BaseTestCase):
     def test_owns_document(self):
         doc = Document.query.first()
         self.assertTrue(self.default_user.owns_document(doc))
-        new_doc = Document({"title": "random document"})
-        new_doc.save()
+        new_doc = Document.create({"title": "random document"})
         self.assertFalse(self.default_user.owns_document(new_doc))
 
 
 class SharesTestCase(BaseTestCase):
     def setUp(self):
         super(SharesTestCase, self).setUp()
-        self.user2 = User(
+        self.user2 = User.create(dict(
             username="user2",
             password="pwpwpw",
             email="user2@gmail.com"
-        )
-        self.user2.save()
+        ))
         Share.create_or_update(self.user2, self.default_document)
 
     def test_create_or_update_share(self):
