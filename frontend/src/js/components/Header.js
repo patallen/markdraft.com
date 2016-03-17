@@ -6,12 +6,14 @@ import NavLink from "./layout/navlink";
 export default class Header extends React.Component {
 	render() {
 		return (
-			<header>
-				<ul>
-					<NavLink to="/" text="Home"/>
-					<NavLink to="/editor" text="Editor"/>
-					<NavLink to="/user" text="User"/>
-				</ul>
+			<header class="navbar navbar-inverse navbar-fixed-top">
+                <div class="container">
+                    <ul class="nav navbar-nav navbar-right">
+                        <NavLink to="/" text="Home"/>
+                        <NavLink to="/editor" text="Editor"/>
+                        <NavLink to="/user" text="User"/>
+                    </ul>
+                </div>
 			</header>
 		)
 	}
