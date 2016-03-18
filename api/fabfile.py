@@ -15,6 +15,7 @@ virtualenv = "/var/%senv" % app_name
 root = "/var/%s" % app_name
 
 apt_packages = [
+    'python',
     'python-dev',
     'gcc',
     'libncurses5-dev',
