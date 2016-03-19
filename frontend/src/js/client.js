@@ -6,7 +6,8 @@ import App from "./app";
 import Editor from "./pages/editor";
 import Index from "./pages/index";
 import User from "./pages/user";
- 
+
+import "../styles/main.scss"
 
 ReactDOM.render((
 	<Router history={hashHistory}>
