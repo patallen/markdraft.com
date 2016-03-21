@@ -51,6 +51,10 @@ class MakeResponse(object):
         if code:
             self.set_status(code)
 
+    def set_success(self, code=200, data=None):
+        self.set_body(data)
+        self.set_status(code)
+
     def set_content_type(self, content_type):
         self.set_header('Content-Type', content_type)
 

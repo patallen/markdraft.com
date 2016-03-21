@@ -29,15 +29,14 @@ def create_document():
 def get_document(doc_id):
     user = api.helpers.get_user()
     doc = Document.query.get_or_404((doc_id))
-    res = document_schema.dump(doc)
 
     xhr = MakeResponse()
     if not doc.user_has_access(user, 'read'):
         xhr.set_error(401, "Not Authorized")
         return xhr.response
 
-    xhr.set_body(data=res.data)
-    xhr.set_status(200)
+    res = document_schema.dump(doc)
+    xhr.set_success(data=res.data)
     return xhr.response
 
 
