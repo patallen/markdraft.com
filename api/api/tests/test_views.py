@@ -121,6 +121,11 @@ class DocumentsViewsTestCase(BaseTestCase):
         self.assertAllIn(results, ['created_at', 'title', 'updated_at', 'id'])
         self.assertEqual(results['title'], "This is a Test Title")
 
+    def test_get_document_no_access(self):
+        doc = Document.create(dict(title="random", body="text"))
+        res = self.client.get('/documents/%s' % doc.id, headers=self.headers)
+        self.assertStatus(res, 401)
+
     def test_edit_document(self):
         req = json.dumps({"title": "this is a new title"})
         res = self.client.put('/documents/1', data=req, headers=self.headers)
