@@ -21,7 +21,8 @@ class BaseTestCase(unittest.TestCase):
             username="testuser",
             password="123abc",
             first_name="Test",
-            last_name="User"
+            last_name="User",
+            _admin=True
         )
         self.document = dict(
             title="This is a Test Title",

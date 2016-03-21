@@ -91,9 +91,9 @@ class UserModelTestCase(BaseTestCase):
 
     def test_active_and_admin(self):
         self.assertTrue(self.default_user.is_active)
-        self.assertFalse(self.default_user.is_admin)
-        self.default_user.update_attributes({"_admin": True})
         self.assertTrue(self.default_user.is_admin)
+        self.default_user.update_attributes({"_admin": False})
+        self.assertFalse(self.default_user.is_admin)
 
     def test_owns_document(self):
         doc = Document.query.first()

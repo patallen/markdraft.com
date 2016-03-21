@@ -43,6 +43,11 @@ def get_user_tags(user_id):
 @blueprint.route("")
 @jwt.require_jwt
 def get_users():
+    user = helpers.get_user()
+    xhr = MakeResponse()
+    if not user.is_admin:
+        xhr.set_error(401, "You must be an admin.")
+        return xhr.response
     users = User.query.all()
     users = [u.to_dict(include='is_admin') for u in users]
     xhr = MakeResponse(200, body=users)

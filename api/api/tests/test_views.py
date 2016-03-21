@@ -16,6 +16,11 @@ class UsersViewsTestCase(BaseTestCase):
             "last_name": "McUser"
         }
 
+    def test_users_no_admin_get(self):
+        self.default_user._admin = False
+        res = self.client.get('/users', headers=self.headers)
+        self.assertStatus(res, 401)
+
     def test_users_get(self):
         res = self.client.get('/users', headers=self.headers)
         self.assertStatus200(res)
