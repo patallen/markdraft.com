@@ -157,3 +157,6 @@ class Tag(AuditMixin, BaseMixin, db.Model):
         backref=db.backref('tags'),
         secondary=tags
     )
+
+    def user_is_owner(self, user):
+        return self.user == user

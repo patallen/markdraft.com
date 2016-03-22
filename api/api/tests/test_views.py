@@ -175,13 +175,28 @@ class TagsViewsTestCase(BaseTestCase):
         res = self.client.get('/tags/1', headers=self.headers)
         self.assertStatus200(res)
 
+    def test_get_tag_no_access(self):
+        tag = Tag.create(dict(title="TAGGY"))
+        res = self.client.get("/tags/%s" % tag.id, headers=self.headers)
+        self.assertStatus(res, 401)
+
     def test_delete_tag(self):
         res = self.client.delete('/tags/1', headers=self.headers)
         self.assertStatus200(res)
         self.assertIsNone(Tag.query.get(1))
 
+    def test_delete_tag_no_access(self):
+        tag = Tag.create(dict(title="TAGGY"))
+        res = self.client.delete('/tags/%s' % tag.id, headers=self.headers)
+        self.assertStatus(res, 401)
+        self.assertIsNotNone(Tag.query.get(tag.id))
+
     def test_get_docs_for_tag(self):
+        tag = Tag.query.get(1)
+        doc = Document.create(dict(title="Random DOCKY"))
+        doc.tags.append(tag)
         res = self.client.get('/tags/1/documents', headers=self.headers)
         self.assertStatus200(res)
         data = json.loads(res.data)
         self.assertIsNotNone(data.get('results'))
+        self.assertEqual(len(data.get('results')), 1)

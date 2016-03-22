@@ -1,5 +1,6 @@
 from flask import request, g, Blueprint
 
+import api
 from api.auth import jwt
 from marklib.request import MakeResponse
 from data.models import Tag, schemas
@@ -15,7 +16,7 @@ tags_schema = schemas.TagSchema(many=True)
 @blueprint.route("", methods=['POST'])
 @jwt.require_jwt
 def create_tag():
-    user = g.current_user
+    user = api.helpers.get_user()
     data = tag_schema.load(request.get_json()).data
     data["user"] = user
     tag = Tag.create(data)
@@ -26,25 +27,40 @@ def create_tag():
 @blueprint.route("/<int:tag_id>")
 @jwt.require_jwt
 def get_tag(tag_id):
+    user = api.helpers.get_user()
     tag = Tag.query.get_or_404(tag_id)
+    xhr = MakeResponse(200)
+
+    if not tag.user_is_owner(user):
+        xhr.set_error(401, "You are not the owner of this tag.")
+        return xhr.response
+
     tag = tag_schema.dump(tag).data
-    xhr = MakeResponse(200, body=tag)
+    xhr.set_body(data=tag)
     return xhr.response
 
 
 @blueprint.route("/<int:tag_id>", methods=['DELETE'])
 @jwt.require_jwt
 def delete_tag(tag_id):
+    user = api.helpers.get_user()
     tag = Tag.query.get_or_404(tag_id)
-    tag.delete()
     xhr = MakeResponse(200)
+
+    if not tag.user_is_owner(user):
+        xhr.set_error(401, "You are not the owner of this tag.")
+        return xhr.response
+
+    tag.delete()
     return xhr.response
 
 
 @blueprint.route("/<int:tag_id>/documents")
 @jwt.require_jwt
 def get_docs_for_tag(tag_id):
+    user = api.helpers.get_user()
     tag = Tag.query.get_or_404(tag_id)
-    docs = documents_schema.dump(tag.documents).data
+    accessible = api.helpers.filter_by_access(user, tag.documents, 'read')
+    docs = documents_schema.dump(accessible).data
     xhr = MakeResponse(200, body=docs)
     return xhr.response
