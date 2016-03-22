@@ -10,6 +10,9 @@ class BaseMixinTestCase(BaseTestCase):
         self.default_document.save()
         self.assertEqual(self.default_document.title, "BOOM")
 
+        with self.assertRaises(ValueError):
+            self.default_document.update_attributes({"not_an_attr": 'doodoo'})
+
     def test_get(self):
         title = "This is a Test Title"
         self.assertEqual(self.default_document.get('title'), title)
