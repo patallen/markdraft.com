@@ -133,11 +133,29 @@ class DocumentsViewsTestCase(BaseTestCase):
         doc = Document.query.get(1)
         self.assertEqual(doc.title, "this is a new title")
 
+    def test_edit_document_no_access(self):
+        doc = Document.create(dict(title="daslkf", body="kdsjf"))
+        req = json.dumps({"title": "this is a new title"})
+        res = self.client.put(
+            '/documents/%s' % doc.id,
+            data=req, headers=self.headers
+        )
+        self.assertStatus(res, 401)
+
     def test_delete_document(self):
         res = self.client.delete('/documents/1', headers=self.headers)
         self.assertStatus200(res)
         doc = Document.query.get(1)
         self.assertIsNone(doc)
+
+    def test_delete_document_no_access(self):
+        doc = Document.create(dict(title="daslkf", body="kdsjf"))
+        res = self.client.delete(
+            '/documents/%s' % doc.id,
+            headers=self.headers
+        )
+        self.assertStatus(res, 401)
+        self.assertIsNotNone(Document.query.get(doc.id))
 
 
 class TagsViewsTestCase(BaseTestCase):
