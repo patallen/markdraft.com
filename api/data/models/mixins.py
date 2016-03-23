@@ -78,3 +78,6 @@ class BaseMixin(object):
         db.session.delete(self)
         if commit:
             db.session.commit()
+
+    def user_is_owner(self, user):
+        return self.user == user

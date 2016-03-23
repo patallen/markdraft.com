@@ -13,9 +13,6 @@ class Document(AuditMixin, BaseMixin, db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     body = db.Column(db.String())
 
-    def user_is_owner(self, user):
-        return self.user == user
-
     def user_has_access(self, user, permission='read'):
         if self.user_is_owner(user):
             return True
@@ -157,6 +154,3 @@ class Tag(AuditMixin, BaseMixin, db.Model):
         backref=db.backref('tags'),
         secondary=tags
     )
-
-    def user_is_owner(self, user):
-        return self.user == user
