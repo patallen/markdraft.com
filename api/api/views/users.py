@@ -4,6 +4,8 @@ from api import helpers
 from api.auth import jwt
 from marklib.request import MakeResponse
 from data.models import User, schemas
+from marklib.request import decorators
+
 
 blueprint = Blueprint('user', __name__, url_prefix='/users')
 documents_schema = schemas.DocumentSchema(many=True)
@@ -11,6 +13,7 @@ documents_schema = schemas.DocumentSchema(many=True)
 
 # User's Document GET (ALL)
 @blueprint.route("/<int:user_id>/documents")
+@decorators.crossdomain()
 @jwt.require_jwt
 def get_user_documents(user_id):
     user = helpers.get_user()
@@ -26,6 +29,7 @@ def get_user_documents(user_id):
 
 # User's Tag GET (ALL)
 @blueprint.route("/<int:user_id>/tags")
+@decorators.crossdomain()
 @jwt.require_jwt
 def get_user_tags(user_id):
     user = helpers.get_user()
@@ -41,6 +45,7 @@ def get_user_tags(user_id):
 
 # Get Users
 @blueprint.route("")
+@decorators.crossdomain()
 @jwt.require_jwt
 def get_users():
     user = helpers.get_user()

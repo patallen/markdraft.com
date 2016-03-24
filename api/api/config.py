@@ -13,6 +13,7 @@ class Config(object):
 
 class Development(Config):
     DEBUG = True
+    CORS_DOMAIN = 'markdraft.dev'
     APP_NAME = 'markdraft'
     db_uri = "postgresql://vagrant:vagrant@localhost/{0}"
     SQLALCHEMY_DATABASE_URI = db_uri.format(APP_NAME)

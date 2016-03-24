@@ -36,11 +36,11 @@ def crossdomain(
             h = resp.headers
 
             origin = current_app.config.get('CORS_DOMAIN', '*')
-            origin = "kd"
 
             h['Access-Control-Allow-Origin'] = origin
             h['Access-Control-Allow-Methods'] = get_methods()
             h['Access-Control-Max-Age'] = str(max_age)
+
             if headers is not None:
                 h['Access-Control-Allow-Headers'] = headers
             return resp
