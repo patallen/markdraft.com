@@ -114,6 +114,10 @@ class DocumentsViewsTestCase(BaseTestCase):
         self.assertStatus(res, 201)
         self.assertIsNotNone(Document.query.filter_by(title="TEST DOC").all())
 
+    def test_get_all_documents(self):
+        res = self.client.get('/documents', headers=self.headers)
+        self.assertStatus200(res)
+
     def test_get_document(self):
         res = self.client.get('/documents/1', headers=self.headers)
         results = json.loads(res.data).get('results')

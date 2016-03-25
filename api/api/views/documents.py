@@ -10,6 +10,19 @@ blueprint = Blueprint('document', __name__, url_prefix='/documents')
 document_schema = schemas.DocumentSchema()
 documents_schema = schemas.DocumentSchema(many=True)
 
+
+# GET documents available to user
+@blueprint.route("", methods=['GET'])
+@jwt.require_jwt
+def get_available_docs():
+    user = api.helpers.get_user()
+    accessible = api.helpers.filter_by_access(
+        user, Document.query.all(), 'read'
+    )
+    xhr = MakeResponse(200, documents_schema.dump(accessible).data)
+    return xhr.response
+
+
 # Document CREATE
 @blueprint.route("", methods=['POST'])
 @jwt.require_jwt
