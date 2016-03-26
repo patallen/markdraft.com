@@ -37,6 +37,7 @@ class Share(BaseMixin, db.Model):
     )
     read = db.Column(db.Boolean, default=False, nullable=False)
     write = db.Column(db.Boolean, default=False, nullable=False)
+    delete = db.Column(db.Boolean, default=False, nullable=False)
     unique = db.UniqueConstraint()
 
     @classmethod

@@ -79,7 +79,7 @@ def delete_document(doc_id):
     doc = Document.query.get_or_404(doc_id)
     xhr = MakeResponse(200)
 
-    if not doc.user_has_access(user, 'edit'):
+    if not doc.user_has_access(user, 'delete'):
         xhr.set_error(401, "Not authorized to delete document.")
         return xhr.response
 
