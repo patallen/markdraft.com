@@ -24,8 +24,20 @@ def create_token_for_user(user):
     return jwt.dumps(generate_claims(user), header_fields=headers)
 
 
-def verify_token(token):
-    SECRET_KEY = app.config.get('JWT_SECRET_KEY')
+def create_refresh_token(user_id=None, agent=None):
+    SECRET_KEY = app.config.get('JWT_REFRESH_SECRET')
+    jwt = TimedJSONWebSignatureSerializer(SECRET_KEY)
+
+    if not user_id and agent:
+        raise ValueError
+    payload = dict(u=user_id, a=agent)
+    token = jwt.dumps(payload)
+
+    return token
+
+
+def verify_token(token, secret=None):
+    SECRET_KEY = secret or app.config.get('JWT_SECRET_KEY')
     jwt = TimedJSONWebSignatureSerializer(SECRET_KEY)
     try:
         payload = jwt.loads(token)

@@ -1,5 +1,6 @@
 from flask import request, Blueprint
 
+import api
 from api.auth import jwt
 from marklib.request import MakeResponse
 from data.models import User
@@ -57,3 +58,14 @@ def auth_login():
     else:
         xhr.set_error(401, {"error": "Trouble authenticating"})
         return xhr.response
+
+@blueprint.route("/get_refresh_token")
+def get_refresh_token():
+    user = api.helpers.get_user()
+    user_id = user.id
+    agent = request.headers.get('User-Agent')
+    token = jwt.create_refresh_token(user_id, agent)
+    xhr = MakeResponse(200)
+    res = dict(refresh_token=token)
+    xhr.set_body(res)
+    return xhr.response
