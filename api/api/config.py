@@ -15,6 +15,7 @@ class Development(Config):
     DEBUG = True
     CORS_DOMAIN = 'markdraft.dev'
     JWT_REFRESH_SECRET = 'also-change-this-in-production'
+    JWT_REFRESH_EXPIRY = 7*24*60*60
     APP_NAME = 'markdraft'
     db_uri = "postgresql://vagrant:vagrant@localhost/{0}"
     SQLALCHEMY_DATABASE_URI = db_uri.format(APP_NAME)

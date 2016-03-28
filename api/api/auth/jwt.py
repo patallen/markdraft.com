@@ -25,11 +25,13 @@ def create_token_for_user(user):
 
 
 def create_refresh_token(user_id=None, agent=None):
+    EXPIRES_IN = app.config.get('JWT_REFRESH_EXPIRY')
     SECRET_KEY = app.config.get('JWT_REFRESH_SECRET')
-    jwt = TimedJSONWebSignatureSerializer(SECRET_KEY)
+    jwt = TimedJSONWebSignatureSerializer(SECRET_KEY, expires_in=EXPIRES_IN)
 
     if not user_id and agent:
         raise ValueError
+
     payload = dict(u=user_id, a=agent)
     token = jwt.dumps(payload)
 
