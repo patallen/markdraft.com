@@ -59,7 +59,9 @@ def auth_login():
         xhr.set_error(401, {"error": "Trouble authenticating"})
         return xhr.response
 
+
 @blueprint.route("/get_refresh_token")
+@jwt.require_jwt
 def get_refresh_token():
     user = api.helpers.get_user()
     user_id = user.id
@@ -68,4 +70,26 @@ def get_refresh_token():
     xhr = MakeResponse(200)
     res = dict(refresh_token=token)
     xhr.set_body(res)
+    return xhr.response
+
+
+@blueprint.route("/refresh_auth_token")
+@jwt.require_jwt
+def refresh_auth_token():
+    data = request.get_json()
+    agent = request.headers.get('User-Agent')
+    refresh_token = data.get('refresh_token')
+    user = api.helpers.get_user()
+    user_id = user.id
+    xhr = MakeResponse(200)
+
+    if jwt.verify_refresh_token(refresh_token):
+        token = jwt.create_token_for_user(user, user_id, agent)
+        xhr.set_body(token)
+        return xhr.response
+
+    xhr.set_error(
+        401,
+        "Could not refresh, please try logging out and logging back in."
+    )
     return xhr.response

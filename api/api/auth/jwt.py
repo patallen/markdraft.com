@@ -49,6 +49,19 @@ def verify_token(token, secret=None):
     return payload
 
 
+def generate_refresh_payload(user_id, agent):
+    return dict(u=user_id, a=agent)
+
+
+def verify_refresh_token(token, user_id, agent):
+    SECRET_KEY = app.config.get('JWT_REFRESH_SECRET')
+    payload = verify_token(token, SECRET_KEY)
+    check_payload = generate_refresh_payload(user_id, agent)
+    if payload == check_payload:
+        return True
+    return False
+
+
 def require_jwt(f):
     @func.wraps(f)
     def wrapper(*args, **kwargs):
