@@ -5,6 +5,11 @@ from tests import BaseTestCase
 
 
 class TestJWTTestCase(BaseTestCase):
+    def setUp(self):
+        super(TestJWTTestCase, self).setUp()
+        self.agent = 'CHROMIUM 1.2.3.4.5'
+        self.user_id = 1
+
     def test_generate_claims(self):
         claims = jwt.generate_claims(dict(
             username=self.default_user.username,
@@ -51,3 +56,22 @@ class TestJWTTestCase(BaseTestCase):
         with self.app.test_request_context(headers=good_header):
             res = mock_fn()
             self.assertEqual("success", res)
+
+    def test_create_refresh_token(self):
+        with self.assertRaises(ValueError):
+            jwt.create_refresh_token(self.user_id, None)
+
+    def test_generate_refresh_payload(self):
+        should_equal = dict(u=self.user_id, a=self.agent)
+        payload = jwt.generate_refresh_payload(self.user_id, self.agent)
+        self.assertEqual(should_equal, payload)
+
+    def test_verify_refresh_token(self):
+        token = jwt.create_refresh_token(self.user_id, self.agent)
+        bad_token = token[:len(token)-3]
+        self.assertTrue(
+            jwt.verify_refresh_token(token, self.user_id, self.agent)
+        )
+        self.assertFalse(
+            jwt.verify_refresh_token(bad_token, self.user_id, self.agent)
+        )

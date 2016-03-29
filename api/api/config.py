@@ -28,3 +28,5 @@ class Testing(Config):
     APP_NAME = 'markdraft_test'
     db_uri = "postgresql://vagrant:vagrant@localhost/{0}"
     SQLALCHEMY_DATABASE_URI = db_uri.format(APP_NAME)
+    JWT_REFRESH_SECRET = 'some-random-stuff-for-testing'
+    JWT_REFRESH_EXPIRY = 7*24*60*60

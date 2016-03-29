@@ -29,7 +29,7 @@ def create_refresh_token(user_id=None, agent=None):
     SECRET_KEY = app.config.get('JWT_REFRESH_SECRET')
     jwt = TimedJSONWebSignatureSerializer(SECRET_KEY, expires_in=EXPIRES_IN)
 
-    if not user_id and agent:
+    if not (user_id and agent):
         raise ValueError
 
     payload = dict(u=user_id, a=agent)
