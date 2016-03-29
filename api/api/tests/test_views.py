@@ -105,7 +105,7 @@ class UsersViewsTestCase(BaseTestCase):
 
 class DocumentsViewsTestCase(BaseTestCase):
     def test_create_document(self):
-        self.assertNotAllowed("/documents", allowed=['POST'])
+        self.assertNotAllowed("/documents", allowed=['POST', 'GET'])
         req = json.dumps({
             "title": "TEST DOC",
         })
