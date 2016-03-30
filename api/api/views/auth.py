@@ -73,7 +73,7 @@ def get_refresh_token():
     return xhr.response
 
 
-@blueprint.route("/refresh_auth_token")
+@blueprint.route("/refresh_auth_token", methods=['POST'])
 @jwt.require_jwt
 def refresh_auth_token():
     data = request.get_json()
@@ -83,9 +83,9 @@ def refresh_auth_token():
     user_id = user.id
     xhr = MakeResponse(200)
 
-    if jwt.verify_refresh_token(refresh_token):
-        token = jwt.create_token_for_user(user, user_id, agent)
-        xhr.set_body(token)
+    if jwt.verify_refresh_token(refresh_token, user_id, agent):
+        token = jwt.create_token_for_user(user)
+        xhr.set_body(dict(access_token=token))
         return xhr.response
 
     xhr.set_error(

@@ -41,6 +41,7 @@ def create_refresh_token(user_id=None, agent=None):
 def verify_token(token, secret=None):
     SECRET_KEY = secret or app.config.get('JWT_SECRET_KEY')
     jwt = TimedJSONWebSignatureSerializer(SECRET_KEY)
+    jwt.loads(token)
     try:
         payload = jwt.loads(token)
     except Exception as e:

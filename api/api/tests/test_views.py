@@ -204,3 +204,38 @@ class TagsViewsTestCase(BaseTestCase):
         data = json.loads(res.data)
         self.assertIsNotNone(data.get('results'))
         self.assertEqual(len(data.get('results')), 1)
+
+
+class JWTViewsTestCase(BaseTestCase):
+
+    def test_get_refresh_token(self):
+        self.headers.append(('User-Agent', 'this-is-chrome-i-promise'))
+        res = self.client.get('/auth/get_refresh_token', headers=self.headers)
+        self.assertStatus200(res)
+        self.assertIn('refresh_token', res.data)
+
+    def test_refresh_auth_token(self):
+        self.headers.append(('User-Agent', 'this-is-chrome-i-promise'))
+        token_res = self.client.get(
+            '/auth/get_refresh_token',
+            headers=self.headers
+        )
+        data = json.loads(token_res.data)
+        token = data.get('results').get('refresh_token')
+
+        res = self.client.post(
+            '/auth/refresh_auth_token',
+            data=json.dumps(dict(refresh_token=token)),
+            headers=self.headers
+        )
+        self.assertStatus200(res)
+        self.assertIn('access_token', res.data)
+
+        bad_token = token[:len(token)-30]
+
+        bad_res = self.client.get(
+            '/auth/refresh_auth_token',
+            data=json.dumps(dict(refresh_token=bad_token)),
+            headers=self.headers
+        )
+        self.assertStatus(bad_res, 401)
