@@ -233,7 +233,7 @@ class JWTViewsTestCase(BaseTestCase):
 
         bad_token = token[:len(token)-30]
 
-        bad_res = self.client.get(
+        bad_res = self.client.post(
             '/auth/refresh_auth_token',
             data=json.dumps(dict(refresh_token=bad_token)),
             headers=self.headers
