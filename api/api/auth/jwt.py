@@ -1,7 +1,12 @@
 import functools as func
 
-from itsdangerous import TimedJSONWebSignatureSerializer
-from flask import request, Response, g, current_app as app
+from itsdangerous import (
+    TimedJSONWebSignatureSerializer,
+    BadSignature,
+    SignatureExpired,
+)
+
+from flask import request, g, current_app as app
 
 from data.models import User
 from marklib.request import MakeResponse
@@ -41,12 +46,16 @@ def create_refresh_token(user_id=None, agent=None):
 def verify_token(token, secret=None):
     SECRET_KEY = secret or app.config.get('JWT_SECRET_KEY')
     jwt = TimedJSONWebSignatureSerializer(SECRET_KEY)
+
     try:
         payload = jwt.loads(token)
+    except SignatureExpired as e:
+        return False, "Token has expired."
+    except BadSignature as e:
+        return False, "Token may have been tampered with."
     except Exception as e:
-        # Should either log here, or catch different exceptions
-        return False
-    return payload
+        return False, "An error occured while decoding token."
+    return True, payload
 
 
 def generate_refresh_payload(user_id, agent):
@@ -55,7 +64,7 @@ def generate_refresh_payload(user_id, agent):
 
 def verify_refresh_token(token, user_id, agent):
     SECRET_KEY = app.config.get('JWT_REFRESH_SECRET')
-    payload = verify_token(token, SECRET_KEY)
+    success, payload = verify_token(token, SECRET_KEY)
     check_payload = generate_refresh_payload(user_id, agent)
     if payload == check_payload:
         return True
@@ -65,7 +74,7 @@ def verify_refresh_token(token, user_id, agent):
 def require_jwt(f):
     @func.wraps(f)
     def wrapper(*args, **kwargs):
-        JWT_PREFIX = app.config.get('JWT_TOKEN_PREFIX')
+        PREFIX = app.config.get('JWT_TOKEN_PREFIX')
         auth_header = request.headers.get('Authorization', None)
 
         payload = None
@@ -76,10 +85,11 @@ def require_jwt(f):
         if auth_header is None:
             return xhr.response
 
-        if len(auth_header) > 0 and auth_header.startswith(JWT_PREFIX):
-            payload = verify_token(auth_header[len(JWT_PREFIX):].strip())
+        succ = False
+        if len(auth_header) > 0 and auth_header.startswith(PREFIX):
+            succ, payload = verify_token(auth_header[len(PREFIX):].strip())
 
-        if not payload:
+        if not succ:
             return xhr.response
 
         user_id = payload.get('user_id')

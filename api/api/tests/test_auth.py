@@ -23,10 +23,12 @@ class TestJWTTestCase(BaseTestCase):
 
     def test_verify_token(self):
         good_token = jwt.create_token_for_user(self.default_user)
-        payload = jwt.verify_token(good_token)
-        self.assertTrue(payload)
+        succ, payload = jwt.verify_token(good_token)
+        self.assertTrue(succ)
         self.assertEqual(payload.get('first_name'), 'Test')
-        self.assertFalse(jwt.verify_token("kdsjfldkfjkdajlf"))
+        succ, bad_payload = jwt.verify_token("lsdkjfdskjfs")
+        self.assertFalse(succ)
+        self.assertIn("tampered", bad_payload)
 
     def test_require_jwt_decorator(self):
         mock = Mock(return_value="success")
