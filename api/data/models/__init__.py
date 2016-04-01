@@ -1,6 +1,6 @@
 from data.models.mixins import AuditMixin, BaseMixin
 from uuid import uuid4
-from marklib.db import GUID
+from marklib.db.ext import GUID
 from data import db
 from werkzeug.security import (
     generate_password_hash, check_password_hash
