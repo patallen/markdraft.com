@@ -1,3 +1,5 @@
+from sqlalchemy.orm import column_property
+
 from data.models.mixins import AuditMixin, BaseMixin
 from uuid import uuid4
 from marklib.db.ext import GUID
@@ -106,6 +108,8 @@ class User(BaseMixin, db.Model):
     _admin = db.Column(db.Boolean, default=False)
     _active = db.Column(db.Boolean, default=True)
     _password = db.Column(db.String(), nullable=False)
+
+    full_name = column_property(first_name + ' ' + last_name)
 
     tags = db.relationship('Tag', backref='user', lazy='dynamic')
 
