@@ -1,4 +1,5 @@
-from sqlalchemy import or_
+from sqlalchemy import or_, asc, desc
+from collections import OrderedDict
 
 
 def values_filter(query, field, values):
@@ -17,3 +18,42 @@ def contains_string(query, fields, value):
         filters.append(field.ilike('%{}%'.format(value)))
 
     return query.filter(or_(*filters))
+
+
+def limit_and_offset(query, page=None, rows=None):
+    limit = rows or 25
+    page = page or 1
+    offset = limit * (page-1)
+    query = query.limit(limit).offset(offset)
+    return query
+
+
+def parse_sort_string(sort_string):
+    sorts = sort_string.split(',')
+    parsed = OrderedDict()
+    for item in sorts:
+        split = item.split(' ')
+        parsed[split[0]] = split[1]
+    return parsed
+
+
+def sort_query(query, model, sort_string):
+    """
+    Function for sorting a query based on the sort string
+    provided in the url params.
+    """
+    if not sort_string:
+        return query
+
+    if not isinstance(model, str):
+        model = model.__name__
+
+    sorts = parse_sort_string(sort_string)
+    for sort_by, direction in sorts.iteritems():
+        if direction == 'desc':
+            sort_func = desc
+        if direction == 'asc':
+            sort_func = asc
+
+        query = query.order_by(sort_func(eval(model + ".{}".format(sort_by))))
+    return query
