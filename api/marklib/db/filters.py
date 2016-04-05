@@ -21,8 +21,8 @@ def contains_string(query, fields, value):
 
 
 def limit_and_offset(query, page=None, rows=None):
-    limit = rows or 25
-    page = page or 1
+    limit = int(rows) or 25
+    page = int(page) or 1
     offset = limit * (page-1)
     query = query.limit(limit).offset(offset)
     return query
@@ -42,6 +42,7 @@ def sort_query(query, model, sort_string):
     Function for sorting a query based on the sort string
     provided in the url params.
     """
+    from data.models import User
     if not sort_string:
         return query
 
