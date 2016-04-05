@@ -1,10 +1,11 @@
-from flask import Blueprint
+from flask import Blueprint, request
 
 from api import helpers
 from api.auth import jwt
 from marklib.request import MakeResponse
 from data.models import User, schemas
 from marklib.request import decorators
+from marklib.db import filters
 
 
 blueprint = Blueprint('user', __name__, url_prefix='/users')
@@ -48,12 +49,23 @@ def get_user_tags(user_id):
 @decorators.crossdomain()
 @jwt.require_jwt
 def get_users():
+    page = request.args.get('page')
+    rows = request.args.get('rows')
+    sort = request.args.get('sort')
+
     user = helpers.get_user()
+
     xhr = MakeResponse()
     if not user.is_admin:
         xhr.set_error(401, "You must be an admin.")
         return xhr.response
-    users = User.query.all()
+
+    query = User.query
+    query = filters.sort_query(query, User, sort)
+    query = filters.limit_and_offset(query, page=page, rows=rows)
+    count = query.count()
+    users = query.all()
+
     users = [u.to_dict(include='is_admin') for u in users]
     xhr = MakeResponse(200, body=users)
     return xhr.response
