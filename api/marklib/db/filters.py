@@ -11,7 +11,7 @@ def values_filter(query, field, values):
 
 def contains_string(query, fields, value):
     if not hasattr(fields, '__iter__'):
-        fields = tuple(fields)
+        fields = (fields, )
 
     filters = []
     for field in fields:
