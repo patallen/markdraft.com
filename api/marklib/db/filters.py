@@ -4,7 +4,7 @@ from collections import OrderedDict
 
 def values_filter(query, field, values):
     if isinstance(values, basestring):
-        values = list(values)
+        values = [values]
     query = query.filter(field.in_(values))
     return query
 
@@ -21,8 +21,8 @@ def contains_string(query, fields, value):
 
 
 def limit_and_offset(query, page=None, rows=None):
-    limit = int(rows) or 25
-    page = int(page) or 1
+    limit = int(rows or 25)
+    page = int(page or 1)
     offset = limit * (page-1)
     query = query.limit(limit).offset(offset)
     return query
@@ -42,12 +42,8 @@ def sort_query(query, model, sort_string):
     Function for sorting a query based on the sort string
     provided in the url params.
     """
-    from data.models import User
     if not sort_string:
         return query
-
-    if not isinstance(model, str):
-        model = model.__name__
 
     sorts = parse_sort_string(sort_string)
     for sort_by, direction in sorts.iteritems():
@@ -56,5 +52,5 @@ def sort_query(query, model, sort_string):
         if direction == 'asc':
             sort_func = asc
 
-        query = query.order_by(sort_func(eval(model + ".{}".format(sort_by))))
+        query = query.order_by(sort_func(getattr(model, sort_by)))
     return query
