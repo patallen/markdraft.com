@@ -53,3 +53,9 @@ class FiltersTestCase(BaseTestCase):
 
         docs = filters.contains_string(query, Document.title, 'zzzzzzz')
         self.assertEqual(docs.count(), 0)
+
+    def test_limit_and_offset(self):
+        limit = 2
+        query = Document.query
+        docs = filters.limit_and_offset(query, rows=limit)
+        self.assertEqual(docs.count(), 2)
