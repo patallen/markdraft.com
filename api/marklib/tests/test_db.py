@@ -41,3 +41,15 @@ class FiltersTestCase(BaseTestCase):
 
         docs = filters.values_filter(query, Document.title, 'Title 10')
         self.assertEqual(docs.count(), 0)
+
+    def test_contains_string_filter(self):
+        query = Document.query
+
+        docs = filters.contains_string(query, Document.title, 'Title')
+        self.assertEqual(docs.count(), 4)
+
+        docs = filters.contains_string(query, Document.title, 'title')
+        self.assertEqual(docs.count(), 4)
+
+        docs = filters.contains_string(query, Document.title, 'zzzzzzz')
+        self.assertEqual(docs.count(), 0)
