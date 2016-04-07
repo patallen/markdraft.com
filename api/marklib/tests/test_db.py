@@ -59,3 +59,9 @@ class FiltersTestCase(BaseTestCase):
         query = Document.query
         docs = filters.limit_and_offset(query, rows=limit)
         self.assertEqual(docs.count(), 2)
+
+    def test_sort_query(self):
+        query = Document.query
+        sort_string = "title desc"
+        doc_query = filters.sort_query(query, Document, sort_string)
+        self.assertEqual(doc_query[0].title, 'Title 3')
