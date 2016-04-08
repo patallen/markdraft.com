@@ -65,3 +65,7 @@ class FiltersTestCase(BaseTestCase):
         sort_string = "title desc"
         doc_query = filters.sort_query(query, Document, sort_string)
         self.assertEqual(doc_query[0].title, 'Title 3')
+
+        sort_string = "title asc"
+        doc_query = filters.sort_query(query, Document, sort_string)
+        self.assertEqual(doc_query[-1].title, 'Title 3')
