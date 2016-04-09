@@ -46,3 +46,11 @@ class MakeResponseTestCase(BaseTestCase):
         res.set_content_type("text/html")
         ctype = res.response.headers.get('Content-Type')
         self.assertEqual(ctype, "text/html")
+
+
+class DecoratorsTestCase(BaseTestCase):
+    def test_crossdomain_decorator(self):
+        assert self.app.config.get('CORS_DOMAIN') is not None
+        res = self.client.options('/users')
+        origin = res.headers.get('Access-Control-Allow-Origin')
+        self.assertIn('markdraft.dev', origin)

@@ -5,6 +5,8 @@ class Config(object):
     JWT_EXPIRE_TIME = 3600
     JWT_TOKEN_PREFIX = "Bearer"
 
+    CORS_DOMAIN = 'markdraft.dev'
+
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SECRET_KEY = "change-this-in-production"
     LOG_LEVEL = 'DEBUG'
@@ -13,7 +15,6 @@ class Config(object):
 
 class Development(Config):
     DEBUG = True
-    CORS_DOMAIN = 'markdraft.dev'
     JWT_REFRESH_SECRET = 'also-change-this-in-production'
     JWT_REFRESH_EXPIRY = 7*24*60*60
     APP_NAME = 'markdraft'
