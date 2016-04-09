@@ -5,8 +5,7 @@ class Config(object):
     JWT_EXPIRE_TIME = 3600
     JWT_TOKEN_PREFIX = "Bearer"
 
-    CORS_DOMAIN = 'markdraft.dev'
-
+    CORS_DOMAIN = 'markdraft.com'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SECRET_KEY = "change-this-in-production"
     LOG_LEVEL = 'DEBUG'
@@ -18,6 +17,7 @@ class Development(Config):
     JWT_REFRESH_SECRET = 'also-change-this-in-production'
     JWT_REFRESH_EXPIRY = 7*24*60*60
     APP_NAME = 'markdraft'
+    CORS_DOMAIN = 'markdraft.dev'
     db_uri = "postgresql://vagrant:vagrant@localhost/{0}"
     SQLALCHEMY_DATABASE_URI = db_uri.format(APP_NAME)
 
@@ -27,6 +27,7 @@ class Testing(Config):
     DEBUG = True
     TESTING = True
     APP_NAME = 'markdraft_test'
+    CORS_DOMAIN = 'markdraft.dev'
     db_uri = "postgresql://vagrant:vagrant@localhost/{0}"
     SQLALCHEMY_DATABASE_URI = db_uri.format(APP_NAME)
     JWT_REFRESH_SECRET = 'some-random-stuff-for-testing'
