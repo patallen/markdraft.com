@@ -34,3 +34,10 @@ class RedisStore(object):
 
     def get(self, key):
         return self.store.get(self.name+key)
+
+    def delete(self, *keys):
+        keys = map(lambda s: '%s%s' % (self.name, s), keys)
+        return self.store.delete(*keys) > 0
+
+    def keys(self):
+        return self.store.keys('%s*' % self.name)
