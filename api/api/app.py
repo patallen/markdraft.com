@@ -1,4 +1,5 @@
 from flask import Flask
+from redis import StrictRedis
 from data import db
 from api.views import auth, documents, tags, users
 
@@ -9,6 +10,11 @@ def create_app(config):
     register_extensions(app)
     register_blueprints(app)
     return app
+
+
+def create_redis(config):
+    redis = StrictRedis()
+    return redis
 
 
 def register_extensions(app):
