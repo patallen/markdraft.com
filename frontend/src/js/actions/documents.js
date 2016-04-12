@@ -1,5 +1,11 @@
 import React from 'react';
-import * from './actiontypes';
+import {
+    CREATE_DOCUMENT,
+    DELETE_DOCUMENT,
+    ADD_TAG_TO_DOCUMENT,
+    REMOVE_TAG_FROM_DOCUMENT
+} from './actiontypes';
+
 
 export const createDocument = (doc) => {
     return {
@@ -7,12 +13,14 @@ export const createDocument = (doc) => {
         payload: doc
     }
 }
+
 export const deleteDocument = (id) => {
     return {
         type: DELETE_DOCUMENT,
         payload: id
     }
 }
+
 export const addTagToDocument= (tag, doc) => {
     return {
         type: ADD_TAG_TO_DOCUMENT,
@@ -22,6 +30,7 @@ export const addTagToDocument= (tag, doc) => {
         }
     }
 }
+
 export const removeTagFromDocument= (tag, doc) => {
     return {
         type: REMOVE_TAG_FROM_DOCUMENT,
