@@ -40,7 +40,7 @@ def crossdomain(
             h['Access-Control-Allow-Origin'] = origin
             h['Access-Control-Allow-Methods'] = get_methods()
             h['Access-Control-Max-Age'] = str(max_age)
-
+            headers = 'Authorization'
             if headers is not None:
                 h['Access-Control-Allow-Headers'] = headers
             return resp
