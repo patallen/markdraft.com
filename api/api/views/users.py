@@ -54,6 +54,7 @@ def get_users():
     sort = request.args.get('sort')
 
     user = helpers.get_user()
+    user = User.query.filter_by(username='pat').first()
 
     xhr = MakeResponse()
     if not user.is_admin:
@@ -61,11 +62,12 @@ def get_users():
         return xhr.response
 
     query = User.query
+    count = query.count()
     query = filters.sort_query(query, User, sort)
     query = filters.limit_and_offset(query, page=page, rows=rows)
-    count = query.count()
     users = query.all()
 
     users = [u.to_dict(include='is_admin') for u in users]
-    xhr = MakeResponse(200, body=users)
+    result = helpers.format_result(users, page, rows, count)
+    xhr = MakeResponse(200, body=result)
     return xhr.response
