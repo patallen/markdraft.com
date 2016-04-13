@@ -25,6 +25,8 @@ class UsersViewsTestCase(BaseTestCase):
         res = self.client.get('/users', headers=self.headers)
         self.assertStatus200(res)
         results = json.loads(res.data).get('results')
+        results = results.get('results')
+        self.assertIsNotNone(results)
         self.assertEqual(len(results), 1)
         self.assertNotAllowed("/users", allowed=["GET"])
 
