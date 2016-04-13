@@ -54,7 +54,6 @@ def get_users():
     sort = request.args.get('sort')
 
     user = helpers.get_user()
-    user = User.query.filter_by(username='pat').first()
 
     xhr = MakeResponse()
     if not user.is_admin:
