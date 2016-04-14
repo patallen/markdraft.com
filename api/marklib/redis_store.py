@@ -13,7 +13,7 @@ class RedisStore(object):
         name=None,
         default_expiry=None
     ):
-        self.store = store
+        self.store = store()
         if self.store is None:
             self.store = self.DEFAULT_STORE()
 
