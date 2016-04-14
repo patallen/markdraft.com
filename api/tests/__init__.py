@@ -5,6 +5,8 @@ from api import config
 from api.auth import jwt
 from data import db
 from data.models import Document, Tag, User
+from fakeredis import FakeStrictRedis
+from marklib.redis_store import RedisStore
 
 
 class BaseTestCase(unittest.TestCase):
@@ -37,7 +39,7 @@ class BaseTestCase(unittest.TestCase):
         self.tag.user = self.default_user
         self.default_document.tags.append(self.tag)
         self.db.session.commit()
-        
+        self.redis_store = RedisStore(store=FakeStrictRedis, name='test')
         token = jwt.create_token_for_user(self.default_user)
         self.headers = [
             ('Content-Type', 'application/json'),
