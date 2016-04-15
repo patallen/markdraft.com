@@ -1,5 +1,7 @@
-from fakeredis import FakeStrictRedis
 import unittest
+import time
+
+from fakeredis import FakeStrictRedis
 
 from marklib.redis_store import RedisStore
 
@@ -18,6 +20,9 @@ class RedisStoreTestCase(unittest.TestCase):
             self.redis_store.store.get('{}|a'.format(self.prefix)),
             'valuevaluevalue'
         )
+        self.redis_store.set('willexpire', 'value', expire=.1)
+        time.sleep(.2)
+        self.assertIsNone(self.redis_store.get('willexpire'))
 
     def test_get_method(self):
         self.redis_store.store.set('{}|key'.format(self.prefix), 'value')
