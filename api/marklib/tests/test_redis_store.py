@@ -41,6 +41,12 @@ class RedisStoreTestCase(unittest.TestCase):
         self.redis_store.delete('key')
         self.assertEqual(len(self.redis_store.store.keys()), 0)
 
+        self.redis_store.set('key1', 'value')
+        self.redis_store.set('key2', 'value')
+        self.redis_store.delete('key1', 'key2')
+
+        self.assertEqual(len(self.redis_store.store.keys()), 0)
+
     def test_keys_method(self):
         self.redis_store.set('key1', 'value')
         self.redis_store.set('key2', 'value')
